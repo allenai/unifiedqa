@@ -20,7 +20,7 @@ You can use these in two ways:
 - If you don't have any training data, you can use them for [the evaluation](https://github.com/google-research/text-to-text-transfer-transformer#eval). 
 - If you training data, you can use them as your initial models and [fine-tune on them](https://github.com/google-research/text-to-text-transfer-transformer#fine-tuning).
 
-For more details see [the T5 reposityry](https://github.com/google-research/text-to-text-transfer-transformer). 
+For more details see [the T5 repository](https://github.com/google-research/text-to-text-transfer-transformer). 
  
 BART will come soon! 
 
