@@ -3,7 +3,7 @@
 
 You may want to check out: 
  - Our paper: TBD 
- - Out demo: https://unifiedqa.apps.allenai.org/
+ - Our demo: https://unifiedqa.apps.allenai.org/
 
 
 ## Models
