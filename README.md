@@ -6,15 +6,15 @@ You may want to check out:
  - Our demo: https://unifiedqa.apps.allenai.org/
 
 
-## Models
+## Released Model Checkpoints
 
 If you intend to create a QA system, you can use our QA-specialized models for your purpose: 
 
- - [T5 (small)](tbd)
- - [T5 (base)](tbd)
- - [T5 (large)](tbd)
- - [T5 (3B)](tbd)
- - [T5 (11B)](tbd)
+ - UnifiedQA (small) [gs://t5-data/unifiedqa/models/small](https://console.cloud.google.com/storage/browser/unifiedqa/models/small)  
+ - UnifiedQA (base) [gs://t5-data/unifiedqa/models/base](https://console.cloud.google.com/storage/browser/unifiedqa/models/base)
+ - UnifiedQA (large) [gs://t5-data/unifiedqa/models/large](https://console.cloud.google.com/storage/browser/unifiedqa/models/large)
+ - UnifiedQA (3B) [gs://t5-data/unifiedqa/models/3b](https://console.cloud.google.com/storage/browser/unifiedqa/models/3b)
+ - UnifiedQA (11B) [gs://t5-data/unifiedqa/models/11b](https://console.cloud.google.com/storage/browser/unifiedqa/models/11b)
 
 You can use these in two ways: 
 - If you don't have any training data, you can use them for [the evaluation](https://github.com/google-research/text-to-text-transfer-transformer#eval). 
@@ -22,5 +22,17 @@ You can use these in two ways:
 
 For more details see [the T5 repository](https://github.com/google-research/text-to-text-transfer-transformer). 
  
-BART will come soon! 
+BART models will come soon! 
+
+## How to cite
+
+If you extend or use this work, please cite the paper: 
+```
+@article{2020unifiedqa,
+    title={UnifiedQA: Crossing Format Boundaries With a Single QA System},
+    author={D. Khashabi and T. Khot and A. Sabhwaral and O. Tafjord and P. Clark and H. Hajishirzi},
+    journal={arXiv preprint},
+    year={2020}
+}
+```
 
