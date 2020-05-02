@@ -27,7 +27,7 @@ BART models will come soon!
 ## How to cite
 
 If you extend or use this work, please cite the paper: 
-```
+```bibtex
 @article{2020unifiedqa,
     title={UnifiedQA: Crossing Format Boundaries With a Single QA System},
     author={D. Khashabi and T. Khot and A. Sabhwaral and O. Tafjord and P. Clark and H. Hajishirzi},
