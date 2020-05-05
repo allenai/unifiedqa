@@ -2,7 +2,7 @@
 
 
 You may want to check out: 
- - Our paper: TBD 
+ - Our paper: https://arxiv.org/abs/2005.00700
  - Our demo: https://unifiedqa.apps.allenai.org/
 
 
