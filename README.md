@@ -26,6 +26,14 @@ For more details see [the T5 repository](https://github.com/google-research/text
  
 BART models will come soon! 
 
+## The datasets/tasks used in the experiments
+While the datasets we used are all public, it could be a bit time-confusing to convert them all into text-to-text format. We're releasing the already proccessed text-to-text datasets: 
+[To be updated]
+
+## Prediction files 
+We're making the predictions of the many of our models available. 
+[To be updated]
+
 ## How to cite
 
 If you extend or use this work, please cite the paper: 
