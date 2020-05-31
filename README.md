@@ -29,8 +29,8 @@ For more details see [the T5 repository](https://github.com/google-research/text
 ### BART models 
 The `uncased` models uslaly gave us better and more robust results. 
 
- - UnifiedQA (BART,large,cased) [gs://t5-data/unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/)  
- - UnifiedQA (T5,base) [gs://t5-data/unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/)
+ - UnifiedQA (BART,large,uncased) [gs://t5-data/unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/)  
+ - UnifiedQA (BART,large,cased) [gs://t5-data/unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/)
 
 
 ## The datasets/tasks used in the experiments
@@ -47,7 +47,7 @@ If you extend or use this work, please cite the paper:
 ```bibtex
 @article{2020unifiedqa,
     title={UnifiedQA: Crossing Format Boundaries With a Single QA System},
-    author={D. Khashabi and T. Khot and A. Sabhwaral and O. Tafjord and P. Clark and H. Hajishirzi},
+    author={D. Khashabi and S. Min and T. Khot and A. Sabhwaral and O. Tafjord and P. Clark and H. Hajishirzi},
     journal={arXiv preprint},
     year={2020}
 }
