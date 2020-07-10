@@ -29,8 +29,8 @@ For more details see [the T5 repository](https://github.com/google-research/text
 ### BART models 
 The `uncased` models uslaly gave us better and more robust results. 
 
- - UnifiedQA (BART,large,uncased) [gs://t5-data/unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/)  
- - UnifiedQA (BART,large,cased) [gs://t5-data/unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/)
+ - UnifiedQA (BART,large,uncased) [gs://unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/)  
+ - UnifiedQA (BART,large,cased) [gs://unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/)
 
 
 ## The datasets/tasks used in the experiments
