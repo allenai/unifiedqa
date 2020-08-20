@@ -12,11 +12,11 @@ If you intend to create a QA system, you can use our QA-specialized models for y
 
 
 ### T5 models 
- - UnifiedQA (T5,small) [gs://t5-data/unifiedqa/models/small](https://console.cloud.google.com/storage/browser/unifiedqa/models/small)  
- - UnifiedQA (T5,base) [gs://t5-data/unifiedqa/models/base](https://console.cloud.google.com/storage/browser/unifiedqa/models/base)
- - UnifiedQA (T5,large) [gs://t5-data/unifiedqa/models/large](https://console.cloud.google.com/storage/browser/unifiedqa/models/large)
- - UnifiedQA (T5,3B) [gs://t5-data/unifiedqa/models/3B](https://console.cloud.google.com/storage/browser/unifiedqa/models/3B)
- - UnifiedQA (T5,11B) [gs://t5-data/unifiedqa/models/11B](https://console.cloud.google.com/storage/browser/unifiedqa/models/11B)
+ - UnifiedQA (T5,small) [gs://unifiedqa/models/small](https://console.cloud.google.com/storage/browser/unifiedqa/models/small)  
+ - UnifiedQA (T5,base) [gs://unifiedqa/models/base](https://console.cloud.google.com/storage/browser/unifiedqa/models/base)
+ - UnifiedQA (T5,large) [gs://unifiedqa/models/large](https://console.cloud.google.com/storage/browser/unifiedqa/models/large)
+ - UnifiedQA (T5,3B) [gs://unifiedqa/models/3B](https://console.cloud.google.com/storage/browser/unifiedqa/models/3B)
+ - UnifiedQA (T5,11B) [gs://unifiedqa/models/11B](https://console.cloud.google.com/storage/browser/unifiedqa/models/11B)
 
 Note: In the experiments reported in our paper we always used the checkpoint closest to 100k steps (it usually corresponds to checkpoint 1100500) 
 
