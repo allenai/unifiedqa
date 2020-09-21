@@ -48,7 +48,7 @@ If you extend or use this work, please cite the paper:
 @article{2020unifiedqa,
     title={UnifiedQA: Crossing Format Boundaries With a Single QA System},
     author={D. Khashabi and S. Min and T. Khot and A. Sabhwaral and O. Tafjord and P. Clark and H. Hajishirzi},
-    journal={arXiv preprint},
+    journal={EMNLP - findings},
     year={2020}
 }
 ```
