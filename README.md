@@ -35,8 +35,9 @@ The `uncased` models uslaly gave us better and more robust results.
 ## Feeding data into UnifiedQA
 Datasets should be converted into a textin/text-out format. 
 
- - We use `\n` separators between different parts of the input. This ensures having a humanlike encoding while not making it overly-specific to a certain format. 
+ - We use `\n` separators between different parts of the input. This ensures having a humanlike encoding while not making it overly-specific to a certain format.  Note that this separator isn't the newline character (which it looks suspiciously like), but rather backslash-n. 
  - Question always comes first. 
+ - Make sure the whole input is correctly [pre-processed](https://github.com/allenai/unifiedqa/blob/7bf0653c6fb68a51019924fd4c51615155acbebe/tasks.py#L54-L58) (e.g., lower-cased)
 
 Here are several examples: 
 
