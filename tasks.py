@@ -48,6 +48,31 @@ DATASETS = [
     "physical_iqa",
 ]
 
+DATA_DIR = f"gs://unifiedqa/data/"
+
+def generic_dataset_preprocessor(ds):
+    def normalize_text(text):
+        """Lowercase and remove quotes from a TensorFlow string."""
+        text = tf.strings.lower(text)
+        text = tf.strings.regex_replace(text, "'(.*)'", r"\1")
+        return text
+
+    def to_inputs_and_targets(ex):
+        return {
+            "inputs": normalize_text(ex["inputs"]),
+            "targets": normalize_text(ex["targets"])
+        }
+
+    return ds.map(to_inputs_and_targets,
+                  num_parallel_calls=tf.data.experimental.AUTOTUNE)
+
+def get_downloaded_data_path(data_dir1, split):
+    tsv_path = {
+        "train": os.path.join(data_dir1, "train.tsv"),
+        "dev": os.path.join(data_dir1, "dev.tsv"),
+        "test": os.path.join(data_dir1, "test.tsv")
+    }
+    return tsv_path[split]
 
 for dataset in DATASETS:
     print(f" >>>> reading dataset: {dataset}")
