@@ -68,6 +68,68 @@ We're making the predictions of the many of our models available.
 [To be updated]
 
 
+## Using the models in PyTorch/HuggingFace
+
+
+First download a subset of the model directory, as we need need only few of the files:
+```
+$ ls -l
+total 316048
+-rw-r--r--  1 tafjord  staff        387 May 12 18:51 checkpoint
+-rw-r--r--  1 tafjord  staff          8 May 12 18:01 model.ckpt-1100500.data-00000-of-00002
+-rw-r--r--  1 tafjord  staff  121752064 May 12 18:01 model.ckpt-1100500.data-00001-of-00002
+-rw-r--r--  1 tafjord  staff       5677 May 12 18:01 model.ckpt-1100500.index
+-rw-r--r--  1 tafjord  staff   26892327 May 12 18:02 model.ckpt-1100500.meta
+```
+Then edit the checkpoint file so it refers to the right checkpoint in the first line:
+```
+$ cat checkpoint 
+model_checkpoint_path: "model.ckpt-1100500"
+all_model_checkpoint_paths: "model.ckpt-1000000"
+all_model_checkpoint_paths: "model.ckpt-1020100"
+...
+```
+
+Now, can run this with Transformers 2.9:
+
+```python
+from transformers import T5Config, T5Tokenizer, T5ForConditionalGeneration
+from transformers.modeling_t5 import load_tf_weights_in_t5
+
+base_model = "t5-small"
+tokenizer = T5Tokenizer.from_pretrained(base_model)
+model = T5ForConditionalGeneration(T5Config.from_pretrained(base_model))
+
+load_tf_weights_in_t5(model, None, "/Users/tafjord/models/t5/unifiedqa-small/")
+model.eval()
+
+def run_model(input_string, **generator_args):
+    input_ids = tokenizer.encode(input_string, return_tensors="pt")
+    res = model.generate(input_ids, **generator_args)
+    return [tokenizer.decode(x) for x in res]
+```
+
+This agrees with the output of T5 code:
+
+```python
+run_model("Which is best conductor? \n (A) iron (B) feather")
+```
+which gives: `['iron']`
+
+
+```python 
+run_model("Scott filled a tray with juice and put it in a freezer. The next day, Scott opened the freezer. How did the juice most likely change? \n (A) It condensed. (B) It evaporated. (C) It became a gas. (D) It became a solid.")
+```
+which produces: `['it condensed.']`. 
+
+
+Note that you can also pass in the arguments for text generation to the `run_model(.)` function: 
+```python 
+run_model("Which is best conductor? \n (A) iron (B) feather (C) wood (D) plastic",
+         temperature=0.9, num_return_sequences=4, num_beams=20)
+```
+
+
 ## FAQ
 **I am not getting the expected results.** An common issue with using UnifiedQA is making sure you use the separator (`\n`) when encoding encoding your inputs. See [the earlier section](#feeding-data-into-unifiedqa) where we delineate how to encode the inputs. 
 
