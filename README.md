@@ -69,7 +69,7 @@ We're making the predictions of the many of our models available.
 
 
 ## FAQ
-**I am not getting the expected results.** An common issue with using UnifiedQA is making sure you use the separator (`\n`) when encoding encoding your inputs. See [the earlier section](Feeding-data-into-UnifiedQA) where we delineate how to encode the inputs. 
+**I am not getting the expected results.** An common issue with using UnifiedQA is making sure you use the separator (`\n`) when encoding encoding your inputs. See [the earlier section](#feeding-data-into-unifiedqa) where we delineate how to encode the inputs. 
 
 
 ## How to cite
