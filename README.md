@@ -29,8 +29,8 @@ For more details see [the T5 repository](https://github.com/google-research/text
 ### BART models 
 The `uncased` models uslaly gave us better and more robust results. 
 
- - UnifiedQA (BART,large,uncased) [gs://t5-data/unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/)  
- - UnifiedQA (BART,large,cased) [gs://t5-data/unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/)
+ - UnifiedQA (BART,large,uncased) [gs://unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/)  
+ - UnifiedQA (BART,large,cased) [gs://unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/)
 
 ## Feeding data into UnifiedQA
 Datasets should be converted into a textin/text-out format. 
@@ -40,20 +40,20 @@ Datasets should be converted into a textin/text-out format.
 
 Here are several examples: 
 
-|  **Dataset** | SQuAD 1.1 (extractive QA) |
+|  **Dataset** | **SQuAD 1.1 (extractive QA)** |
 | :---: | :--- |
 |  **Encoded Input** | At what speed did the turbine operate? \n (Nikola_Tesla) On his 50th birthday in 1906, Tesla demonstrated his 200 horsepower (150 kilowatts) 16,000 rpm bladeless turbine. ... |
 |  **Encoded Output** | 16,000 rpm |
-|  **Dataset** | NarrativeQA (Abstractive QA) |
+|  **Dataset** | **NarrativeQA (Abstractive QA)** |
 |  **Encoded Input** | What does a drink from narcissus's spring cause the drinker to do?  \n  Mercury has awakened Echo, who weeps for Narcissus, and states that a drink from Narcissus's spring causes the drinkers to ''Grow dotingly enamored of themselves.'' ... |
 |  **Encoded Output** | fall in love with themselves |
-|  **Dataset** | ARC-challenge (Multiple-choice QA) |
+|  **Dataset** | **ARC-challenge (Multiple-choice QA)** |
 |  **Encoded Input** | What does photosynthesis produce that helps plants grow? \n (A) water (B) oxygen (C) protein (D) sugar |
 |  **Encoded Output** | sugar |
-|  **Dataset** | MCTest (Multiple-choice QA) |
+|  **Dataset** | **MCTest (Multiple-choice QA)** |
 |  **Encoded Input** | Who was Billy? \n (A) The skinny kid (B) A teacher (C) A little kid (D) The big kid \n Billy was like a king on the school yard. A king without a queen. He was the biggest kid in our grade, so he made all the rules during recess. ... |
 |  **Encoded Output** | The big kid |
-|  **Dataset** | BoolQ (Yes-no QA) |
+|  **Dataset** | **BoolQ (Yes-no QA)** |
 |  **Encoded Input** | Was America the first country to have a president?  \n (President) The first usage of the word president to denote the highest official in a government was during the Commonwealth of England ... |
 |  **Encoded Output** | no |
 
