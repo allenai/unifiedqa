@@ -134,6 +134,12 @@ run_model("Which is best conductor? \n (A) iron (B) feather (C) wood (D) plastic
 ## FAQ
 **I am not getting the expected results.** An common issue with using UnifiedQA is making sure you use the separator (`\n`) when encoding encoding your inputs. See [the earlier section](#feeding-data-into-unifiedqa) where we delineate how to encode the inputs. 
 
+**Help! I am getting the following error!** See [this discussion](https://github.com/google-research/text-to-text-transfer-transformer/issues/180) if you're getting the following error: 
+```bash 
+ValueError: Configurable 'make_layer_stack' doesn't have a parameter named 'use_universal_transformer'.
+  In file "gs://danielk-files/t5-models/union_mixture/11B/operative_config.gin", line 83
+```
+
 
 ## How to cite
 
