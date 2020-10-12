@@ -28,6 +28,7 @@ For more details see [the T5 repository](https://github.com/google-research/text
 
 ### BART models 
 The BART models are downloaded from [this link](https://storage.googleapis.com/unifiedqa/models/bart/bart-unifiedQA.zip). 
+[Here](https://github.com/allenai/unifiedqa/tree/master/bart_example_solver) is an example code for loading the BART models. 
 The `uncased` models usually gave us better and more robust results. 
 
 ## Feeding data into UnifiedQA
