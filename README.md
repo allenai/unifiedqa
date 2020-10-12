@@ -90,7 +90,7 @@ all_model_checkpoint_paths: "model.ckpt-1020100"
 ...
 ```
 
-Now, can run this with Transformers 2.9:
+Now, can run this with Transformers 3.1 (earlier versions have issues with T5 generation):
 
 ```python
 from transformers import T5Config, T5Tokenizer, T5ForConditionalGeneration
