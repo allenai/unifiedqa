@@ -27,10 +27,8 @@ You can use these in two ways:
 For more details see [the T5 repository](https://github.com/google-research/text-to-text-transfer-transformer). 
 
 ### BART models 
-The `uncased` models uslaly gave us better and more robust results. 
-
- - UnifiedQA (BART,large,uncased) [gs://unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-uncased-xbos-120-resumed/)  
- - UnifiedQA (BART,large,cased) [gs://unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/](https://console.cloud.google.com/storage/browser/unifiedqa/models/bart/unifiedQA-cased-xbos-120-resumed/)
+The BART models are downloaded from [this link](https://storage.googleapis.com/unifiedqa/models/bart/bart-unifiedQA.zip). 
+The `uncased` models usually gave us better and more robust results. 
 
 ## Feeding data into UnifiedQA
 Datasets should be converted into a textin/text-out format. 
