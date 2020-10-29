@@ -6,30 +6,44 @@ You may want to check out:
  - Our demo: https://unifiedqa.apps.allenai.org/
 
 
-## Released Model Checkpoints
+## Using the models in PyTorch/HuggingFace
 
-If you intend to create a QA system, you can use our QA-specialized models for your purpose: 
+You can run this with Transformers >=3.1:
+
+```python
+from transformers import T5Config, T5Tokenizer, T5ForConditionalGeneration
+
+model_name = "allenai/unifiedqa-large" # you can specify the model size here 
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = T5ForConditionalGeneration.from_pretrained(model_name)
+
+def run_model(input_string, **generator_args):
+    input_ids = tokenizer.encode(input_string, return_tensors="pt")
+    res = model.generate(input_ids, **generator_args)
+    return [tokenizer.decode(x) for x in res]
+```
+
+This agrees with the output of T5 code:
+
+```python
+run_model("Which is best conductor? \\n (A) iron (B) feather")
+```
+which gives: `['iron']`
 
 
-### T5 models 
- - UnifiedQA (T5, small) [gs://unifiedqa/models/small](https://console.cloud.google.com/storage/browser/unifiedqa/models/small)  
- - UnifiedQA (T5, base) [gs://unifiedqa/models/base](https://console.cloud.google.com/storage/browser/unifiedqa/models/base)
- - UnifiedQA (T5, large) [gs://unifiedqa/models/large](https://console.cloud.google.com/storage/browser/unifiedqa/models/large)
- - UnifiedQA (T5, 3B) [gs://unifiedqa/models/3B](https://console.cloud.google.com/storage/browser/unifiedqa/models/3B)
- - UnifiedQA (T5, 11B) [gs://unifiedqa/models/11B](https://console.cloud.google.com/storage/browser/unifiedqa/models/11B)
+```python 
+run_model("Scott filled a tray with juice and put it in a freezer. The next day, Scott opened the freezer. How did the juice most likely change? \\n (A) It condensed. (B) It evaporated. (C) It became a gas. (D) It became a solid.")
+```
+which produces: `['it condensed.']`. 
 
-Note: In the experiments reported in our paper we always used the checkpoint closest to 100k steps (it usually corresponds to checkpoint 1100500) 
 
-You can use these in two ways: 
-- If you don't have any training data, you can use them for [the evaluation](https://github.com/google-research/text-to-text-transfer-transformer#eval). 
-- If you training data, you can use them as your initial models and [fine-tune on them](https://github.com/google-research/text-to-text-transfer-transformer#fine-tuning).
+Note that you can also pass in the arguments for text generation to the `run_model(.)` function: 
+```python 
+run_model("Which is best conductor? \\n (A) iron (B) feather (C) wood (D) plastic",
+         temperature=0.9, num_return_sequences=4, num_beams=20)
+```
 
-For more details see [the T5 repository](https://github.com/google-research/text-to-text-transfer-transformer). 
 
-### BART models 
-The BART models are downloaded from [this link](https://storage.googleapis.com/unifiedqa/models/bart/bart-unifiedQA.zip). 
-[Here](https://github.com/allenai/unifiedqa/tree/master/bart_example_solver) is an example code for loading the BART models. 
-The `uncased` models usually gave us better and more robust results. 
 
 ## Feeding data into UnifiedQA
 Datasets should be converted into a textin/text-out format. 
@@ -68,66 +82,32 @@ We're making the predictions of the many of our models available.
 [To be updated]
 
 
-## Using the models in PyTorch/HuggingFace
+
+## Released Model Checkpoints
+
+If you intend to create a QA system, you can use our QA-specialized models for your purpose: 
 
 
-First download a subset of the model directory, as we need need only few of the files:
-```
-$ ls -l
-total 316048
--rw-r--r--  1 tafjord  staff        387 May 12 18:51 checkpoint
--rw-r--r--  1 tafjord  staff          8 May 12 18:01 model.ckpt-1100500.data-00000-of-00002
--rw-r--r--  1 tafjord  staff  121752064 May 12 18:01 model.ckpt-1100500.data-00001-of-00002
--rw-r--r--  1 tafjord  staff       5677 May 12 18:01 model.ckpt-1100500.index
--rw-r--r--  1 tafjord  staff   26892327 May 12 18:02 model.ckpt-1100500.meta
-```
-Then edit the checkpoint file so it refers to the right checkpoint in the first line:
-```
-$ cat checkpoint 
-model_checkpoint_path: "model.ckpt-1100500"
-all_model_checkpoint_paths: "model.ckpt-1000000"
-all_model_checkpoint_paths: "model.ckpt-1020100"
-...
-```
+### T5 models 
+ - UnifiedQA (T5, small) [gs://unifiedqa/models/small](https://console.cloud.google.com/storage/browser/unifiedqa/models/small)  
+ - UnifiedQA (T5, base) [gs://unifiedqa/models/base](https://console.cloud.google.com/storage/browser/unifiedqa/models/base)
+ - UnifiedQA (T5, large) [gs://unifiedqa/models/large](https://console.cloud.google.com/storage/browser/unifiedqa/models/large)
+ - UnifiedQA (T5, 3B) [gs://unifiedqa/models/3B](https://console.cloud.google.com/storage/browser/unifiedqa/models/3B)
+ - UnifiedQA (T5, 11B) [gs://unifiedqa/models/11B](https://console.cloud.google.com/storage/browser/unifiedqa/models/11B)
 
-Now, can run this with Transformers 3.1 (earlier versions have issues with T5 generation):
+Note: In the experiments reported in our paper we always used the checkpoint closest to 100k steps (it usually corresponds to checkpoint 1100500) 
 
-```python
-from transformers import T5Config, T5Tokenizer, T5ForConditionalGeneration
-from transformers.modeling_t5 import load_tf_weights_in_t5
+You can use these in two ways: 
+- If you don't have any training data, you can use them for [the evaluation](https://github.com/google-research/text-to-text-transfer-transformer#eval). 
+- If you training data, you can use them as your initial models and [fine-tune on them](https://github.com/google-research/text-to-text-transfer-transformer#fine-tuning).
 
-base_model = "t5-small"
-tokenizer = T5Tokenizer.from_pretrained(base_model)
-model = T5ForConditionalGeneration(T5Config.from_pretrained(base_model))
+For more details see [the T5 repository](https://github.com/google-research/text-to-text-transfer-transformer). 
 
-load_tf_weights_in_t5(model, None, "/Users/tafjord/models/t5/unifiedqa-small/")
-model.eval()
+### BART models 
+The BART models are downloaded from [this link](https://storage.googleapis.com/unifiedqa/models/bart/bart-unifiedQA.zip). 
+[Here](https://github.com/allenai/unifiedqa/tree/master/bart_example_solver) is an example code for loading the BART models. 
+The `uncased` models usually gave us better and more robust results. 
 
-def run_model(input_string, **generator_args):
-    input_ids = tokenizer.encode(input_string, return_tensors="pt")
-    res = model.generate(input_ids, **generator_args)
-    return [tokenizer.decode(x) for x in res]
-```
-
-This agrees with the output of T5 code:
-
-```python
-run_model("Which is best conductor? \\n (A) iron (B) feather")
-```
-which gives: `['iron']`
-
-
-```python 
-run_model("Scott filled a tray with juice and put it in a freezer. The next day, Scott opened the freezer. How did the juice most likely change? \\n (A) It condensed. (B) It evaporated. (C) It became a gas. (D) It became a solid.")
-```
-which produces: `['it condensed.']`. 
-
-
-Note that you can also pass in the arguments for text generation to the `run_model(.)` function: 
-```python 
-run_model("Which is best conductor? \\n (A) iron (B) feather (C) wood (D) plastic",
-         temperature=0.9, num_return_sequences=4, num_beams=20)
-```
 
 
 ## FAQ
