@@ -54,7 +54,7 @@ from transformers import BartTokenizer
 from bart import MyBart
 
 base_model = "facebook/bart-large"
-unifiedqa_path = "unifiedQA-uncased/best-model.pt" # path to the download checkpoint
+unifiedqa_path = "unifiedQA-uncased/best-model.pt" # path to the downloaded checkpoint
 
 tokenizer = BartTokenizer.from_pretrained(base_model)
 model = MyBart.from_pretrained(base_model, state_dict=torch.load(unifiedqa_path))
