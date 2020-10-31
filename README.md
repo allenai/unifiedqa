@@ -1,7 +1,7 @@
 # UnifiedQA
 
 
-You may want to check out: 
+You may want to check out:
  - Our paper: https://arxiv.org/abs/2005.00700
  - Our demo: https://unifiedqa.apps.allenai.org/
 
@@ -13,7 +13,7 @@ You can run this with Transformers >=3.1:
 ```python
 from transformers import T5Config, T5Tokenizer, T5ForConditionalGeneration
 
-model_name = "allenai/unifiedqa-large" # you can specify the model size here 
+model_name = "allenai/unifiedqa-large" # you can specify the model size here
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = T5ForConditionalGeneration.from_pretrained(model_name)
 
@@ -31,14 +31,14 @@ run_model("Which is best conductor? \\n (A) iron (B) feather")
 which gives: `['iron']`
 
 
-```python 
+```python
 run_model("Scott filled a tray with juice and put it in a freezer. The next day, Scott opened the freezer. How did the juice most likely change? \\n (A) It condensed. (B) It evaporated. (C) It became a gas. (D) It became a solid.")
 ```
-which produces: `['it condensed.']`. 
+which produces: `['it condensed.']`.
 
 
-Note that you can also pass in the arguments for text generation to the `run_model(.)` function: 
-```python 
+Note that you can also pass in the arguments for text generation to the `run_model(.)` function:
+```python
 run_model("Which is best conductor? \\n (A) iron (B) feather (C) wood (D) plastic",
          temperature=0.9, num_return_sequences=4, num_beams=20)
 ```
@@ -46,13 +46,13 @@ run_model("Which is best conductor? \\n (A) iron (B) feather (C) wood (D) plasti
 
 
 ## Feeding data into UnifiedQA
-Datasets should be converted into a textin/text-out format. 
+Datasets should be converted into a textin/text-out format.
 
- - We use `\n` separators between different parts of the input. This ensures having a humanlike encoding while not making it overly-specific to a certain format.  Note that this separator isn't the newline character (which it looks suspiciously like), but rather backslash-n. 
- - Question always comes first. 
+ - We use `\n` separators between different parts of the input. This ensures having a humanlike encoding while not making it overly-specific to a certain format.  Note that this separator isn't the newline character (which it looks suspiciously like), but rather backslash-n.
+ - Question always comes first.
  - Make sure the whole input is correctly [pre-processed](https://github.com/allenai/unifiedqa/blob/7bf0653c6fb68a51019924fd4c51615155acbebe/tasks.py#L54-L58) (e.g., lower-cased)
 
-Here are several examples: 
+Here are several examples:
 
 |  **Dataset** | **SQuAD 1.1 (extractive QA)** |
 | :---: | :--- |
@@ -71,50 +71,48 @@ Here are several examples:
 |  **Encoded Input** | `Was America the first country to have a president?  \n (President) The first usage of the word president to denote the highest official in a government was during the Commonwealth of England ...` |
 |  **Encoded Output** | `no` |
 
-If you wanna see how this encoding is done on our datasets, check out this [script](encode_datasets.py). 
+If you wanna see how this encoding is done on our datasets, check out this [script](encode_datasets.py).
 
 
 ### The datasets/tasks used in the experiments
-While the datasets we used are all public, it could be a bit time-confusing to convert them all into text-to-text format. We're releasing the already-proccessed text-to-text datasets based on the encoding used in this work. Files are included in [this Google Cloud bucket](https://console.cloud.google.com/storage/browser/unifiedqa/data). [Here](encode_datasets.py) is the script we used in order to convert each dataset into text-in-text-out format. 
+While the datasets we used are all public, it could be a bit time-confusing to convert them all into text-to-text format. We're releasing the already-proccessed text-to-text datasets based on the encoding used in this work. Files are included in [this Google Cloud bucket](https://console.cloud.google.com/storage/browser/unifiedqa/data). [Here](encode_datasets.py) is the script we used in order to convert each dataset into text-in-text-out format.
 
-## Prediction files 
-We're making the predictions of the many of our models available. 
+## Prediction files
+We're making the predictions of the many of our models available.
 [To be updated]
 
 
 
 ## Released Model Checkpoints
 
-If you intend to create a QA system, you can use our QA-specialized models for your purpose: 
+If you intend to create a QA system, you can use our QA-specialized models for your purpose:
 
 
-### T5 models 
- - UnifiedQA (T5, small) [gs://unifiedqa/models/small](https://console.cloud.google.com/storage/browser/unifiedqa/models/small)  
+### T5 models
+ - UnifiedQA (T5, small) [gs://unifiedqa/models/small](https://console.cloud.google.com/storage/browser/unifiedqa/models/small)
  - UnifiedQA (T5, base) [gs://unifiedqa/models/base](https://console.cloud.google.com/storage/browser/unifiedqa/models/base)
  - UnifiedQA (T5, large) [gs://unifiedqa/models/large](https://console.cloud.google.com/storage/browser/unifiedqa/models/large)
  - UnifiedQA (T5, 3B) [gs://unifiedqa/models/3B](https://console.cloud.google.com/storage/browser/unifiedqa/models/3B)
  - UnifiedQA (T5, 11B) [gs://unifiedqa/models/11B](https://console.cloud.google.com/storage/browser/unifiedqa/models/11B)
 
-Note: In the experiments reported in our paper we always used the checkpoint closest to 100k steps (it usually corresponds to checkpoint 1100500) 
+Note: In the experiments reported in our paper we always used the checkpoint closest to 100k steps (it usually corresponds to checkpoint 1100500)
 
-You can use these in two ways: 
-- If you don't have any training data, you can use them for [the evaluation](https://github.com/google-research/text-to-text-transfer-transformer#eval). 
+You can use these in two ways:
+- If you don't have any training data, you can use them for [the evaluation](https://github.com/google-research/text-to-text-transfer-transformer#eval).
 - If you training data, you can use them as your initial models and [fine-tune on them](https://github.com/google-research/text-to-text-transfer-transformer#fine-tuning).
 
-For more details see [the T5 repository](https://github.com/google-research/text-to-text-transfer-transformer). 
+For more details see [the T5 repository](https://github.com/google-research/text-to-text-transfer-transformer).
 
-### BART models 
-The BART models are downloaded from [this link](https://storage.googleapis.com/unifiedqa/models/bart/bart-unifiedQA.zip). 
-[Here](https://github.com/allenai/unifiedqa/tree/master/bart_example_solver) is an example code for loading the BART models. 
-The `uncased` models usually gave us better and more robust results. 
-
-
+### BART models
+The BART models are downloaded from [this link](https://nlp.cs.washington.edu/ambigqa/models/unifiedQA/unifiedQA-bart.zip) (3.6G).
+For detailed instructions on running the code (training/finetuning/testing), please refer to [here](https://github.com/allenai/unifiedqa/tree/master/bart).
+The `uncased` models usually gave us better and more robust results.
 
 ## FAQ
-**I am not getting the expected results.** An common issue with using UnifiedQA is making sure you use the separator (`\n`) when encoding encoding your inputs. See [the earlier section](#feeding-data-into-unifiedqa) where we delineate how to encode the inputs. 
+**I am not getting the expected results.** An common issue with using UnifiedQA is making sure you use the separator (`\n`) when encoding encoding your inputs. See [the earlier section](#feeding-data-into-unifiedqa) where we delineate how to encode the inputs.
 
-**Help! I am getting the following error!** See [this discussion](https://github.com/google-research/text-to-text-transfer-transformer/issues/180) if you're getting the following error: 
-```bash 
+**Help! I am getting the following error!** See [this discussion](https://github.com/google-research/text-to-text-transfer-transformer/issues/180) if you're getting the following error:
+```bash
 ValueError: Configurable 'make_layer_stack' doesn't have a parameter named 'use_universal_transformer'.
   In file "gs://danielk-files/t5-models/union_mixture/11B/operative_config.gin", line 83
 ```
@@ -122,7 +120,7 @@ ValueError: Configurable 'make_layer_stack' doesn't have a parameter named 'use_
 
 ## How to cite
 
-If you extend or use this work, please cite the paper: 
+If you extend or use this work, please cite the paper:
 ```bibtex
 @article{2020unifiedqa,
     title={UnifiedQA: Crossing Format Boundaries With a Single QA System},
