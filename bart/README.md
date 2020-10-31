@@ -143,7 +143,7 @@ Below is the table that compares the results with BART and UnifiedQA-BART, both 
 
 
 |   | OBQA | OBQA w/ ir  | ARC-easy  | ARC-easy w/ IR  | ARC_chal  | ARC-chal w/ IR | QASC | QASC w/ ir |
-|---|---|---|---|---|---|---|---|---|---|---|
+|---|---|---|---|---|---|---|---|---|
 |BART     |67.8|66.2|64.1|79.6|36.6|40.4|50.0|75.3|
 |UnifiedQA|63.8|70.0|68.0|82.7|52.1|55.0|53.2|78.2|
 
