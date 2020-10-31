@@ -11,7 +11,7 @@ You may want to check out:
 You can run this with Transformers >=3.1:
 
 ```python
-from transformers import T5Config, T5Tokenizer, T5ForConditionalGeneration
+from transformers import AutoTokenizer, T5ForConditionalGeneration
 
 model_name = "allenai/unifiedqa-large" # you can specify the model size here
 tokenizer = AutoTokenizer.from_pretrained(model_name)
