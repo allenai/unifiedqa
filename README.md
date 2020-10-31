@@ -8,7 +8,7 @@ You may want to check out:
 
 ## Using the models in PyTorch/HuggingFace
 
-You can run this with Transformers >=3.1:
+You can run the models with [Transformers](https://github.com/huggingface/transformers/) >=3.1:
 
 ```python
 from transformers import AutoTokenizer, T5ForConditionalGeneration
