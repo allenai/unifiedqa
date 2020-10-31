@@ -8,10 +8,10 @@ You may want to check out:
 
 ## Using the models in PyTorch/HuggingFace
 
-You can run this with Transformers >=3.1:
+You can load the models with [Transformers](https://github.com/huggingface/transformers/) >=3.1:
 
 ```python
-from transformers import T5Config, T5Tokenizer, T5ForConditionalGeneration
+from transformers import AutoTokenizer, T5ForConditionalGeneration
 
 model_name = "allenai/unifiedqa-large" # you can specify the model size here
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -23,7 +23,7 @@ def run_model(input_string, **generator_args):
     return [tokenizer.decode(x) for x in res]
 ```
 
-This agrees with the output of T5 code:
+For instance, here is how you can use it to answer a multiple-choice question: 
 
 ```python
 run_model("Which is best conductor? \\n (A) iron (B) feather")
