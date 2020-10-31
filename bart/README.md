@@ -37,10 +37,12 @@ pip install torch==1.1.0
 pip install git+https://github.com/huggingface/transformers.git@7b75aa9fa55bee577e2c7403301ed31103125a35
 ```
 
-Download all UnifiedQA datasets and test dataset:
+Download all UnifiedQA datasets and test dataset, which are preprocessed in an input-output format:
 ```
 chmod +x download_data.sh; ./download_data.sh
 ```
+
+You can also use try an arbitrary data by properly formatting the data, as [examples here](https://github.com/allenai/unifiedqa#feeding-data-into-unifiedqa).
 
 ## Quick test
 
@@ -135,7 +137,9 @@ python cli.py --do_predict --output_dir out/${data}_unifiedqa \
         --append_another_bos --prefix test_
 ```
 
-It will save the prediction file as `out/nq-bart-closed-qa/{dev|test}_predictions.json`.
+This command will make inference using the checkpoint `out/${data}_unifiedqa/best-model.pt`, and save the prediction file as `out/${data}/{dev|test}_predictions.json`.
+Please use `--checkpoint` and `--prefix` for a specific checkpoint path and prediction file name.
+
 
 ## Results
 
