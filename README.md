@@ -16,7 +16,7 @@ Here is an examples:
 ```python
 from transformers import AutoTokenizer, T5ForConditionalGeneration
 
-model_name = "allenai/unifiedqa-large" # you can specify the model size here
+model_name = "allenai/unifiedqa-t5-large" # you can specify the model size here
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = T5ForConditionalGeneration.from_pretrained(model_name)
 
