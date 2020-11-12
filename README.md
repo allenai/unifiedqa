@@ -8,7 +8,10 @@ You may want to check out:
 
 ## Using the models in PyTorch/HuggingFace
 
-You can very easily load the models with [Transformers](https://github.com/huggingface/transformers/) >=3.1, instead of downloading them manually:
+You can very easily load the models with [Transformers](https://github.com/huggingface/transformers/) >=3.1, instead of downloading them manually. 
+The models are listed on [this page](https://huggingface.co/allenai). 
+
+Here is an examples: 
 
 ```python
 from transformers import AutoTokenizer, T5ForConditionalGeneration
