@@ -29,20 +29,20 @@ def run_model(input_string, **generator_args):
 For instance, here is how you can use it to answer a multiple-choice question: 
 
 ```python
-run_model("Which is best conductor? \\n (A) iron (B) feather")
+run_model("which is best conductor? \\n (a) iron (b) feather")
 ```
 which gives: `['iron']`
 
 
 ```python
-run_model("Scott filled a tray with juice and put it in a freezer. The next day, Scott opened the freezer. How did the juice most likely change? \\n (A) It condensed. (B) It evaporated. (C) It became a gas. (D) It became a solid.")
+run_model("scott filled a tray with juice and put it in a freezer. the next day, scott opened the freezer. how did the juice most likely change? \\n (a) it condensed. (b) it evaporated. (c) it became a gas. (d) it became a solid.")
 ```
 which produces: `['it condensed.']`.
 
 
 Note that you can also pass in the arguments for text generation to the `run_model(.)` function:
 ```python
-run_model("Which is best conductor? \\n (A) iron (B) feather (C) wood (D) plastic",
+run_model("which is best conductor? \\n (a) iron (b) feather (c) wood (d) plastic",
          temperature=0.9, num_return_sequences=4, num_beams=20)
 ```
 
