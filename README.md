@@ -24,8 +24,6 @@ def run_model(input_string, **generator_args):
     input_ids = tokenizer.encode(input_string, return_tensors="pt")
     res = model.generate(input_ids, **generator_args)
     return tokenizer.batch_decode(res, skip_special_tokens=True)
-
-run_model("which is best conductor? \\n (a) iron (b) feather")
 ```
 
 For instance, here is how you can use it to answer a multiple-choice question: 
