@@ -4,7 +4,7 @@ There are two variants of these retrieved sentences. One has a retrieved set of 
  
  
  
-You can download a zip file from [here](), with the combined ARC/ARC-Easy/OBQA/RegLivEnv train/dev/test sets, 
+You can download a zip file from [here](files/arc-with-ir/ARC-OBQA-RegLivEnv-IR10V2.zip), with the combined ARC/ARC-Easy/OBQA/RegLivEnv train/dev/test sets, 
 along with associated retrieved contexts from the Aristo corpus.
 
 You'll see that the question ids have a prefix for each set:
@@ -32,7 +32,7 @@ An example looks like
 where the "para" field for each answer choice is the retrieved context, typically 10 sentences ordered such that the one with highest IR score comes last ("His skin, his body-linen, his trousers, ..." in the above example).
 
 The other variant, used by UnifiedQA, combines these to a single context for the overall question (by first taking the top-scoring sentence for each answer choice followed by the next six highest scoring sentences). 
-This can be downloaded from [here](). 
+This can be downloaded from [here](files/arc-with-ir/ARC-OBQA-RegLivEnv-IR10V8.zip). 
 
 The format is the same, except the "para" field is now at the top level, again with the 10 sentences sorted with the highest scoring ones last:
 
