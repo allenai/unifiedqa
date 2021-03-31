@@ -4,9 +4,31 @@ from torch import Tensor, nn
 from transformers import T5ForConditionalGeneration, BartForConditionalGeneration
 
 class MyBart(BartForConditionalGeneration):
+    """ TJH: adding , past_key_values=None to forward(..) takes us to next keyword error 'head_mask'
+         Original forward below replaced with new forward (and new =model(...) below)
     def forward(self, input_ids, attention_mask=None, encoder_outputs=None,
             decoder_input_ids=None, decoder_attention_mask=None, decoder_cached_states=None,
             use_cache=False, is_training=False):
+    """
+    def forward(
+        self,
+        input_ids=None,
+        attention_mask=None,
+        decoder_input_ids=None,
+        decoder_attention_mask=None,
+        head_mask=None,
+        decoder_head_mask=None,
+        encoder_outputs=None,
+        past_key_values=None,
+        inputs_embeds=None,
+        decoder_inputs_embeds=None,
+        labels=None,
+        use_cache=None,
+        output_attentions=None,
+        output_hidden_states=None,
+        return_dict=None,
+        is_training=False  # TJH added back as UnifiedQA specific
+    ):
 
         if is_training:
             decoder_start_token_id = self.config.decoder_start_token_id
@@ -16,15 +38,35 @@ class MyBart(BartForConditionalGeneration):
         else:
             _decoder_input_ids = decoder_input_ids.clone()
 
+        # original unifiedQA definition:
+        #outputs = self.model(
+        #    input_ids,
+        #    attention_mask=attention_mask,
+        #    encoder_outputs=encoder_outputs,
+        #    decoder_input_ids=_decoder_input_ids,
+        #    decoder_attention_mask=decoder_attention_mask,
+        #    decoder_cached_states=decoder_cached_states,
+        #    use_cache=use_cache
+        #)
+        
+        # below from modelling_bart.py
         outputs = self.model(
             input_ids,
             attention_mask=attention_mask,
+            decoder_input_ids=decoder_input_ids,
             encoder_outputs=encoder_outputs,
-            decoder_input_ids=_decoder_input_ids,
             decoder_attention_mask=decoder_attention_mask,
-            decoder_cached_states=decoder_cached_states,
+            head_mask=head_mask,
+            decoder_head_mask=decoder_head_mask,
+            past_key_values=past_key_values,
+            inputs_embeds=inputs_embeds,
+            decoder_inputs_embeds=decoder_inputs_embeds,
             use_cache=use_cache,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
         )
+        
         lm_logits = F.linear(outputs[0], self.model.shared.weight, bias=self.final_logits_bias)
         if is_training:
             loss_fct = nn.CrossEntropyLoss(reduce=False)

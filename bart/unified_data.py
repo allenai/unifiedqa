@@ -23,8 +23,8 @@ class UnifiedQAData(QAData):
             "boolq",
             "race_string",
             "openbookqa"]
-        self.data_path = data_path
-        self.data_type = data_path.split("/")[-1][:-4]
+        self.data_path = data_path  #TJH this should be ../unifiedqa/train.tsv
+        self.data_type = data_path.split("/")[-1][:-4]    #TJH strip .tsv from filename appearing after final "/"
         assert self.data_type in ["train", "dev", "test"]
 
         if args.debug:
