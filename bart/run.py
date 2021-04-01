@@ -11,7 +11,7 @@ from unified_data import UnifiedQAData
 from bart import MyBart
 
 def run(args, logger):
-    tokenizer = BartTokenizer.from_pretrained("bart-large")
+    tokenizer = BartTokenizer.from_pretrained("facebook/bart-large")
 
     if args.is_unifiedqa:
         dev_data = UnifiedQAData(logger, args, args.predict_file, False)
@@ -31,10 +31,10 @@ def run(args, logger):
         train_data.load_dataloader()
 
         if args.checkpoint is not None:
-            model = MyBart.from_pretrained("bart-large",
+            model = MyBart.from_pretrained("facebook/bart-large",
                                            state_dict=torch.load(args.checkpoint))
         else:
-            model = MyBart.from_pretrained("bart-large")
+            model = MyBart.from_pretrained("facebook/bart-large")
         if args.n_gpu>1:
             model = torch.nn.DataParallel(model)
         if args.n_gpu>0:
@@ -53,7 +53,7 @@ def run(args, logger):
 
     if args.do_predict:
         checkpoint = os.path.join(args.output_dir, 'best-model.pt') if args.checkpoint is None else args.checkpoint
-        model = MyBart.from_pretrained("bart-large",
+        model = MyBart.from_pretrained("facebook/bart-large",
                                        state_dict=torch.load(checkpoint))
         logger.info("Loading checkpoint from {}".format(checkpoint))
         if args.n_gpu>0:

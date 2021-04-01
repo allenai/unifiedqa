@@ -53,7 +53,7 @@ class MyBart(BartForConditionalGeneration):
         outputs = self.model(
             input_ids,
             attention_mask=attention_mask,
-            decoder_input_ids=decoder_input_ids,
+            decoder_input_ids=_decoder_input_ids,   #TJH added underscore
             encoder_outputs=encoder_outputs,
             decoder_attention_mask=decoder_attention_mask,
             head_mask=head_mask,
