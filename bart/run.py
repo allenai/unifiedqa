@@ -32,7 +32,8 @@ def run(args, logger):
 
         if args.checkpoint is not None:
             model = MyBart.from_pretrained("facebook/bart-large",
-                                           state_dict=torch.load(args.checkpoint)) #TJH: bart-large
+                                           state_dict=torch.load(args.checkpoint))  #TJH: bart-large
+            logger.info("Loading checkpoint from {}".format(args.checkpoint))       #TJH Added
         else:
             model = MyBart.from_pretrained("facebook/bart-large") #TJH: bart-large
         if args.n_gpu>1:
@@ -83,7 +84,11 @@ def train(args, logger, model, train_data, dev_data, optimizer, scheduler):
 
     logger.info("Starting training!")
     for epoch in range(int(args.num_train_epochs)):
+        if args.verbose: 
+            logger.info("Starting Epoch %d" % (epoch))  #TJH added
         for batch in train_data.dataloader:
+            if args.verbose and global_step % 100 == 0:
+                logger.info("Epoch %d   Global Step %d" % (epoch, global_step))   #TJH Added
             global_step += 1
             batch = [b.to(torch.device("cuda")) for b in batch]
 # TJH: this was the original unifiedqa:            
@@ -121,6 +126,8 @@ def train(args, logger, model, train_data, dev_data, optimizer, scheduler):
                     torch.save(model_state_dict, os.path.join(args.output_dir,
                                                               "best-model-{}.pt".format(str(global_step).zfill(6))))
                 else:
+                    if args.verbose:
+                        logger.info("Step %d Starting inference.." % (global_step)) #TJH Added
                     model.eval()
                     curr_em = inference(model if args.n_gpu==1 else model.module, dev_data)
                     logger.info("Step %d Train loss %.2f %s %.2f%% on epoch=%d" % (
@@ -142,8 +149,10 @@ def train(args, logger, model, train_data, dev_data, optimizer, scheduler):
                         stop_training = False
                     else:
                         wait_step += 1
+                        logger.info("No improvement. Number of wait steps: %d of max wait steps: %d" % (wait_step, args.wait_step))
                         if wait_step >= args.wait_step:
                             stop_training = True
+                            logger.info("Early Stopping due to no improvement after %d wait steps!" % (wait_step))   #TJH Added
                             break
                 model.train()
         if stop_training:

@@ -84,7 +84,7 @@ class MyBart(BartForConditionalGeneration):
         lm_logits = F.linear(outputs[0], self.model.shared.weight, bias=self.final_logits_bias)
         
         loss = None
-        if labels is not None:   #TJH added labels is not None instead of is_training
+        if labels is not None:   #TJH labels is not None instead of is_training
             loss_fct = nn.CrossEntropyLoss(reduce=False)
             losses = loss_fct(lm_logits.view(-1, self.config.vocab_size),
                               labels.view(-1))
