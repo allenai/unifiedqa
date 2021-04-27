@@ -110,10 +110,12 @@ class QAData(object):
                 questions = ["<s> "+question for question in questions]
                 answers = ["<s> " +answer for answer in answers]
             question_input = tokenizer.batch_encode_plus(questions,
-                                                         pad_to_max_length=True,
+                                                         truncation=True,       #TJH added
+                                                         padding='max_length',  #TJH was pad_to_max_length=True,
                                                          max_length=self.args.max_input_length)
             answer_input = tokenizer.batch_encode_plus(answers,
-                                                       pad_to_max_length=True,
+                                                       truncation=True,       #TJH added
+                                                       padding='max_length',  #TJH was pad_to_max_length=True,
                                                        max_length=self.args.max_output_length)
             input_ids, attention_mask = question_input["input_ids"], question_input["attention_mask"]
             decoder_input_ids, decoder_attention_mask = answer_input["input_ids"], answer_input["attention_mask"]
