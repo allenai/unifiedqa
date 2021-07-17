@@ -8,6 +8,7 @@ from random import shuffle
 from typing import List
 import spacy
 from tqdm import tqdm
+import pandas as pd
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -1234,6 +1235,33 @@ def summarization():
 
     readfile("/Users/danielk/ideaProjects/t2t-qa/t2t-data/summarization-xsum-test/test.tsv")
     readfile("/Users/danielk/ideaProjects/t2t-qa/t2t-data/summarization-xsum-test/train.tsv")
+    
+    
+def csqa2_process(file, dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    ans = open(f"{dataset}/{kind}_ans.jsonl", "w+")
+
+    all_answers=[]
+    df=pd.read_json('/content/csqa2/dataset/'+file, lines=True, compression='gzip')
+    questions=df[['question','answer','topic_prompt','id']].values
+
+    for row in range(len(questions)):
+        question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+        answer=questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        all_answers.append(answer)
+        topic_prompt=questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        id=questions[row][3]
+
+        fmeta.write(f"{id} \n")
+        fout.write(f"{question} \\n {topic_prompt}\t{answer}\n")
+        ans.write(json.dumps(all_answers) + "\n")
+    
+def csqa():
+    csqa2_process('CSQA2_train.json.gz','csqa2','train')
+    csqa2_process('CSQA2_dev.json.gz','csqa2','dev')
 
 anlg()
 summarization()
@@ -1268,3 +1296,4 @@ natural_questions_direct_answer()
 winogrande()
 physical_iqa()
 social_iqa()
+csqa()
