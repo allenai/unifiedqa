@@ -1238,26 +1238,25 @@ def summarization():
     
     
 def csqa2_process(file, dataset, kind):
-    fout = open(f"{dataset}/{kind}.tsv", "w+")
-    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
-    ans = open(f"{dataset}/{kind}_ans.jsonl", "w+")
+  fout = open(f"{dataset}/{kind}.tsv", "w+")
+  fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+  ans = open(f"{dataset}/{kind}_ans.jsonl", "w+")
 
-    all_answers=[]
-    df=pd.read_json('/content/csqa2/dataset/'+file, lines=True, compression='gzip')
-    questions=df[['question','answer','topic_prompt','id']].values
+  all_answers=[]
+  df=pd.read_json('/content/csqa2/dataset/'+file, lines=True, compression='gzip')
+  questions=df[['question','answer','id']].values
 
-    for row in range(len(questions)):
-        question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
-        if '?' not in question:
-            question = question + "?"
-        answer=questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
-        all_answers.append(answer)
-        topic_prompt=questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
-        id=questions[row][3]
+  for row in range(len(questions)):
+    question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+    if '?' not in question:
+      question = question + "?"
+    answer=questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+    all_answers.append(answer)
+    id=questions[row][2]
 
-        fmeta.write(f"{id} \n")
-        fout.write(f"{question} \\n {topic_prompt}\t{answer}\n")
-        ans.write(json.dumps(all_answers) + "\n")
+    fmeta.write(f"{id} \n")
+    fout.write(f"{question} \t{answer}\n")
+    ans.write(json.dumps(all_answers) + "\n")
     
 def csqa():
     csqa2_process('CSQA2_train.json.gz','csqa2','train')
