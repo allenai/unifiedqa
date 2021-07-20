@@ -1242,7 +1242,6 @@ def csqa2_process(file, dataset, kind):
   fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
   ans = open(f"{dataset}/{kind}_ans.jsonl", "w+")
 
-  all_answers=[]
   df=pd.read_json('/content/csqa2/dataset/'+file, lines=True, compression='gzip')
   questions=df[['question','answer','id']].values
 
@@ -1250,13 +1249,12 @@ def csqa2_process(file, dataset, kind):
     question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
     if '?' not in question:
       question = question + "?"
-    answer=questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
-    all_answers.append(answer)
+    answer=[questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")]
     id=questions[row][2]
 
     fmeta.write(f"{id} \n")
     fout.write(f"{question} \t{answer}\n")
-    ans.write(json.dumps(all_answers) + "\n")
+    ans.write(json.dumps(answer) + "\n")
     
 def csqa():
     csqa2_process('CSQA2_train.json.gz','csqa2','train')
