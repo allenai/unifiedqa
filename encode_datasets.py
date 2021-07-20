@@ -1238,27 +1238,82 @@ def summarization():
     
     
 def csqa2_process(file, dataset, kind):
-  fout = open(f"{dataset}/{kind}.tsv", "w+")
-  fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
-  ans = open(f"{dataset}/{kind}_ans.jsonl", "w+")
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    ans = open(f"{dataset}/{kind}_ans.jsonl", "w+")
 
-  df=pd.read_json('/content/csqa2/dataset/'+file, lines=True, compression='gzip')
-  questions=df[['question','answer','id']].values
+    df=pd.read_json('/content/csqa2/dataset/'+file, lines=True, compression='gzip')
+    questions=df[['question','answer','id']].values
 
-  for row in range(len(questions)):
-    question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
-    if '?' not in question:
-      question = question + "?"
-    answer=[questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")]
-    id=questions[row][2]
+    for row in range(len(questions)):
+        question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+        answer=[questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")]
+        id=questions[row][2]
 
-    fmeta.write(f"{id} \n")
-    fout.write(f"{question} \t{answer}\n")
-    ans.write(json.dumps(answer) + "\n")
+        fmeta.write(f"{id} \n")
+        fout.write(f"{question} \t{answer[0]}\n")
+        ans.write(json.dumps(answer) + "\n")
     
 def csqa():
     csqa2_process('CSQA2_train.json.gz','csqa2','train')
     csqa2_process('CSQA2_dev.json.gz','csqa2','dev')
+    
+def pubmedqa_process(file, dataset, kind):
+    fout_long = open(f"{dataset}/Long_answer/{kind}.tsv", "w+")
+    fout_short = open(f"{dataset}/Short_answer/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    ans_long = open(f"{dataset}/Long_answer/{kind}_ans.jsonl", "w+")
+    ans_short = open(f"{dataset}/Short_answer/{kind}_ans.jsonl", "w+")
+
+    df=pd.read_json(codecs.open('/content/'+file,'r','utf-8')).transpose()
+    questions=df[['QUESTION','CONTEXTS','LONG_ANSWER','final_decision']].values
+    meta=df.index.values
+    for id in meta:
+        fmeta.write(f"{id} \n")
+
+    for row in range(len(questions)):
+        question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+        separator=','
+        contexts=separator.join(questions[row][1]).strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        long_answer=[questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")]
+        answer=[questions[row][3].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")]
+
+        fout_long.write(f"{question}\\n {contexts} \t{long_answer[0]}\n")
+        fout_short.write(f"{question}\\n {contexts} \t{answer[0]}\n")
+        ans_short.write(json.dumps(answer) + "\n")
+        ans_long.write(json.dumps(long_answer) + "\n")
+    
+def pubmedqa_process_un(file, dataset, kind):
+    fout_long = open(f"{dataset}/Long_answer/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    ans_long = open(f"{dataset}/Long_answer/{kind}_ans.jsonl", "w+")
+
+    df=pd.read_json(codecs.open('/content/'+file,'r','utf-8')).transpose()
+    questions=df[['QUESTION','CONTEXTS','LONG_ANSWER']].values
+    meta=df.index.values
+    for id in meta:
+        fmeta.write(f"{id} \n")
+        
+    for row in range(len(questions)):
+        question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+        separator=','
+        contexts=separator.join(questions[row][1]).strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        long_answer=[questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")]
+
+        fout_long.write(f"{question}\\n {contexts} \t{long_answer[0]}\n")
+        ans_long.write(json.dumps(long_answer) + "\n")
+    
+def pubmedqa():
+    pubmedqa_process('ori_pqal.json','PubMedQA','pqal_train')
+    pubmedqa_process('ori_pqaa.json','PubMedQA','pqaa_train')
+    pubmedqa_process('test_set.json','PubMedQA','test')
+    pubmedqa_process_un('ori_pqau.json','PubMedQA','pqau_train')
 
 anlg()
 summarization()
@@ -1294,3 +1349,4 @@ winogrande()
 physical_iqa()
 social_iqa()
 csqa()
+pubmedqa()
