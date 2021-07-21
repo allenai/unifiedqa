@@ -1261,11 +1261,11 @@ def csqa():
     csqa2_process('CSQA2_dev.json.gz','csqa2','dev')
     
 def pubmedqa_process(file, dataset, kind):
-    fout_long = open(f"{dataset}/Long_answer/{kind}.tsv", "w+")
-    fout_short = open(f"{dataset}/Short_answer/{kind}.tsv", "w+")
+    fout_long = open(f"{dataset}/long_answer/{kind}.tsv", "w+")
+    fout_short = open(f"{dataset}/short_answer/{kind}.tsv", "w+")
     fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
-    ans_long = open(f"{dataset}/Long_answer/{kind}_ans.jsonl", "w+")
-    ans_short = open(f"{dataset}/Short_answer/{kind}_ans.jsonl", "w+")
+    ans_long = open(f"{dataset}/long_answer/{kind}_ans.jsonl", "w+")
+    ans_short = open(f"{dataset}/short_answer/{kind}_ans.jsonl", "w+")
 
     df=pd.read_json(codecs.open('/content/'+file,'r','utf-8')).transpose()
     questions=df[['QUESTION','CONTEXTS','LONG_ANSWER','final_decision']].values
@@ -1288,9 +1288,9 @@ def pubmedqa_process(file, dataset, kind):
         ans_long.write(json.dumps(long_answer) + "\n")
     
 def pubmedqa_process_un(file, dataset, kind):
-    fout_long = open(f"{dataset}/Long_answer/{kind}.tsv", "w+")
+    fout_long = open(f"{dataset}/long_answer/{kind}.tsv", "w+")
     fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
-    ans_long = open(f"{dataset}/Long_answer/{kind}_ans.jsonl", "w+")
+    ans_long = open(f"{dataset}/long_answer/{kind}_ans.jsonl", "w+")
 
     df=pd.read_json(codecs.open('/content/'+file,'r','utf-8')).transpose()
     questions=df[['QUESTION','CONTEXTS','LONG_ANSWER']].values
@@ -1310,10 +1310,10 @@ def pubmedqa_process_un(file, dataset, kind):
         ans_long.write(json.dumps(long_answer) + "\n")
     
 def pubmedqa():
-    pubmedqa_process('ori_pqal.json','PubMedQA','pqal_train')
-    pubmedqa_process('ori_pqaa.json','PubMedQA','pqaa_train')
-    pubmedqa_process('test_set.json','PubMedQA','test')
-    pubmedqa_process_un('ori_pqau.json','PubMedQA','pqau_train')
+    pubmedqa_process('ori_pqal.json','pubmedqa','pqal_train')
+    pubmedqa_process('ori_pqaa.json','pubmedqa','pqaa_train')
+    pubmedqa_process('test_set.json','pubmedqa','test')
+    pubmedqa_process_un('ori_pqau.json','pubmedqa','pqau_train')
 
 anlg()
 summarization()
