@@ -1255,10 +1255,31 @@ def csqa2_process(file, dataset, kind):
         fmeta.write(f"{id} \n")
         fout.write(f"{question} \t{answer[0]}\n")
         ans.write(json.dumps(answer) + "\n")
+    return len(questions)
+
+def csqa2_process_test(file, dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+
+    df=pd.read_json('/content/'+file, lines=True, compression='gzip')
+    questions=df[['question','id']].values
+
+    for row in range(len(questions)):
+        question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+        id=questions[row][1]
+
+        fmeta.write(f"{id} \n")
+        fout.write(f"{question}\n")
+    return len(questions)
     
 def csqa():
-    csqa2_process('CSQA2_train.json.gz','csqa2','train')
-    csqa2_process('CSQA2_dev.json.gz','csqa2','dev')
+    train_count = csqa2_process('CSQA2_train.json.gz','csqa2','train')
+    dev_count = csqa2_process('CSQA2_dev.json.gz','csqa2','dev')
+    test_count = csqa2_process_test('CSQA2_test_no_answers.json.gz','csqa2','test')
+    with open(f"/content/csqa2/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
     
 def pubmedqa_process(file, dataset, kind):
     fout_long = open(f"{dataset}/long_answer/{kind}.tsv", "w+")
@@ -1314,7 +1335,290 @@ def pubmedqa():
     pubmedqa_process('ori_pqaa.json','pubmedqa','pqaa_train')
     pubmedqa_process('test_set.json','pubmedqa','test')
     pubmedqa_process_un('ori_pqau.json','pubmedqa','pqau_train')
+    
+def strategyqa_process(file, dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    ans = open(f"{dataset}/{kind}_ans.jsonl", "w+")
 
+    df=pd.read_json(codecs.open('/content/'+file,'r','utf-8'))
+    questions=df[['qid','term','question','answer']].values
+
+    documents=pd.read_json(codecs.open('/content/queries_cache.json','r','utf-8'))
+
+    for row in range(len(questions)):
+        qid = questions[row][0]
+        term = questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        term = "(" +term + ")"
+        question=questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+        if questions[row][3]==True:
+            answer=["yes"]
+        else:
+            answer=["no"]
+        query=clean_query(questions[row][2]) 
+        arr=documents[query]
+        retrieved_documents=[]
+        token_num=0
+        for result in arr[0]:
+            sentences=result["sentence"].split(".")
+            for index in range(len(sentences)-1):
+                if (token_num+len(sentences[index].split(" ")))<500:
+                    token_num += len(sentences[index].split(" "))
+                    retrieved_documents.append(sentences[index] + ".")
+        retrieved_document=''.join(retrieved_documents).strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+    
+        fout.write(f"{question}\\n {term} {retrieved_document} \t{answer[0]}\n")
+        ans.write(json.dumps(answer) + "\n")
+        fmeta.write(f"{qid} \n")
+    return len(questions)
+
+def strategyqa_process_test(file, dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+
+    df=pd.read_json(codecs.open('/content/'+file,'r','utf-8'))
+    questions=df[['qid','question']].values
+
+    documents=pd.read_json(codecs.open('/content/queries_cache.json','r','utf-8'))
+
+    for row in range(len(questions)):
+        qid = questions[row][0]
+        question=questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+
+        query=clean_query(questions[row][1]) 
+        arr=documents[query]
+        retrieved_documents=[]
+        token_num=0
+        for result in arr[0]:
+            sentences=result["sentence"].split(".")
+            for index in range(len(sentences)-1):
+                if (token_num+len(sentences[index].split(" ")))<500:
+                    token_num += len(sentences[index].split(" "))
+                    retrieved_documents.append(sentences[index] + ".")
+        retrieved_document=''.join(retrieved_documents).strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+    
+        fout.write(f"{question}\\n {retrieved_document}\n")
+        fmeta.write(f"{qid} \n")
+    return len(questions)
+
+def clean_query(query, remove_stopwords=True):
+    if remove_stopwords:
+        query_split = query.split()
+        new_query_split = []
+        for word in query_split:
+            if word.lower() + " " not in STOPWORDS:
+                new_query_split.append(word)
+        query = " ".join(new_query_split)
+    return query
+
+def strategyqa():
+    train_count=strategyqa_process('strategyqa_train.json','strategyqa','train')
+    test_count=strategyqa_process_test('strategyqa_test.json','strategyqa','test')
+    with open(f"/content/strategyqa/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "test": test_count}, outfile)
+        
+def reclor_process(file, dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+
+    df=pd.read_json(codecs.open('/content/'+file,'r','utf-8'))
+    questions=df[['question','answers','context','label','id_string']].values
+        
+    for row in range(len(questions)):
+        question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+        candidates=questions[row][1]        
+        options = " ".join([f"({chr(ord('A') + i)}) {x}" for i, x in enumerate(candidates)])
+        contexts=questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+
+        label = questions[row][3]
+        answer=questions[row][1][label].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        id=questions[row][4]
+        answer_index = chr(ord('A')+(label))
+
+        fmeta.write(f"{id}\t{answer_index}\n")
+        fout.write(f"{question} \\n{options} \\n {contexts}\t{answer}\n")
+    return len(questions)
+
+def reclor_process_test(file, dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+
+    df=pd.read_json(codecs.open('/content/'+file,'r','utf-8'))
+    questions=df[['question','answers','context','id_string']].values
+        
+    for row in range(len(questions)):
+        question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+        candidates=questions[row][1]        
+        options = " ".join([f"({chr(ord('A') + i)}) {x}" for i, x in enumerate(candidates)])
+        contexts=questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        id=questions[row][3]
+
+        fmeta.write(f"{id}\n")
+        fout.write(f"{question} \\n{options} \\n {contexts}\n")
+    return len(questions)
+
+def reclor():
+    train_count = reclor_process("train.json","reclor","train")
+    val_count = reclor_process("val.json","reclor","val")
+    test_count = reclor_process_test("test.json","reclor","test")
+    with open(f"/content/reclor/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "val": val_count, "test": test_count}, outfile)
+
+def race_c_process(dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+
+    l = [pd.read_json(filename) for filename in glob.glob("/content/data/"+kind+"/*.txt")]
+    df = pd.concat(l, axis=0)
+    questions=df[['questions','options','article','answers','id']].values
+        
+    for row in range(len(questions)):
+        question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+        candidates=questions[row][1]        
+        options = " ".join([f"({chr(ord('A') + i)}) {x}" for i, x in enumerate(candidates)])
+        contexts=questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+
+        answer = questions[row][3]
+        answer_index=ord(answer)-ord('A')
+        answer_string=questions[row][1][answer_index].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        id=questions[row][4]
+
+        fmeta.write(f"{id}\t{answer} \n")
+        fout.write(f"{question} \\n{options} \\n {contexts}\t{answer_string} \n")
+    return len(questions)
+
+def race_c():
+    train_count= race_c_process("race-c","train")
+    dev_count= race_c_process("race-c","dev")
+    test_count= race_c_process("race-c","test")
+    with open(f"/content/race-c/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
+        
+def record_process_extractive (file,dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    counter=0
+    
+    with open("/content/"+file) as f:
+        for l in f.readlines()[1:]:
+            json_line = json.loads(l)
+            contexts=json_line['passage']['text'].replace("@highlight","")
+            contexts=contexts.strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            for index in range(len(json_line['qas'])):
+                counter +=1
+                question=json_line['qas'][index]['query'].replace("@placeholder","_")
+                question=question.replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+                if '.' not in question:
+                    question = question + "."  
+                if kind is not "test":     
+                    answer_string=json_line['qas'][index]['answers'][0]['text'].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+                id=json_line['qas'][index]['idx']
+
+                fmeta.write(f"{id}\n")
+                if kind=="test":
+                    fout.write(f"{question} \\n {contexts} \n")
+                else:
+                    fout.write(f"{question} \\n {contexts} \t {answer_string} \n")
+    return counter
+
+def record_extractive():
+    train_count=record_process_extractive("train.jsonl","record","train")
+    val_count=record_process_extractive("val.jsonl","record","val")
+    test_count=record_process_extractive("test.jsonl","record","test")
+    with open(f"/content/record/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "val": val_count, "test": test_count}, outfile)
+        
+def record_process_mc(file,dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    counter=0
+    
+    with open("/content/"+file) as f:
+        for l in f.readlines()[1:]:
+            json_line = json.loads(l)
+            for index in range(len(json_line['qas'])):
+                counter +=1
+                contexts=json_line['passage']['text']
+                entities=json_line['passage']['entities']
+                options=[]
+                answers=[]
+                if kind is not "test":
+                    for row in range(len(json_line['qas'][index]['answers'])):
+                        answer_string=json_line['qas'][index]['answers'][row]['text']
+                        if answer_string not in answers:
+                            answers.append(answer_string)
+                    answer_string=answers[0]
+                    answers.remove(answer_string)
+                for entity in entities:
+                    option=contexts[entity['start']:entity['end']+1]
+                    if option not in options and option not in answers:
+                        options.append(option.strip().replace("@highlight","").replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " "))
+                candidates = " ".join([f"({chr(ord('A') + i)}) {x}" for i, x in enumerate(options)])
+                contexts=contexts.strip().replace("@highlight","").replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+                question=json_line['qas'][index]['query'].replace("@placeholder","_")
+                question=question.replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+                if '.' not in question:
+                    question = question + "." 
+                if kind is not "test":     
+                    answer_string=answer_string.strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+                    answer_index=chr(ord('A') + options.index(answer_string))
+                id=json_line['qas'][index]['idx']
+
+                if kind=="test":
+                    fout.write(f"{question} \\n {candidates} \\n {contexts} \n")
+                    fmeta.write(f"{id}\n")
+                else:
+                    fout.write(f"{question} \\n {candidates} \\n {contexts} \t {answer_string} \n")
+                    fmeta.write(f"{id}\t{answer_index}\n")
+    return counter
+
+def record_mc():
+    train_count=record_process_mc("train.jsonl","record","train")
+    val_count=record_process_mc("val.jsonl","record","val")
+    test_count=record_process_mc("test.jsonl","record","test")
+    with open(f"/content/record/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "val": val_count, "test": test_count}, outfile)
+        
+def quail_process(file,dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    counter=0
+    
+    with open("/content/quail/quail_v1.3/json/"+file) as f:
+        for l in f.readlines()[1:]:
+            counter +=1
+            json_line = json.loads(l)
+            contexts=json_line['context'].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            options=json_line['answers']
+            candidates = " ".join([f"({chr(ord('A') + i)}) {x}" for i, x in enumerate(options)])
+            question=json_line['question'].replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+
+            answer_id=int(json_line['correct_answer_id'])
+            answer_string=options[answer_id].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            answer_index=chr(ord('A') + answer_id)
+            id=json_line['id']
+
+            fout.write(f"{question} \\n {candidates} \\n {contexts} \t {answer_string} \n")
+            fmeta.write(f"{id}\t{answer_index}\n")
+    return counter
+
+def quail():
+    train_count=quail_process("train.jsonl","quail","train")
+    dev_count=quail_process("dev.jsonl","quail","dev")
+    challenge_count=quail_process("challenge.jsonl","quail","challenge")
+    with open(f"/content/quail/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "dev": dev_count, "challenge": challenge_count}, outfile)
+        
 anlg()
 summarization()
 drop()
@@ -1350,3 +1654,9 @@ physical_iqa()
 social_iqa()
 csqa()
 pubmedqa()
+strategyqa()
+reclor()
+race_c()
+record_extractive()
+record_mc()
+quail()
