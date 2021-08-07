@@ -9,7 +9,16 @@ from typing import List
 import spacy
 from tqdm import tqdm
 import pandas as pd
+import codecs
+import nltk
+import glob
 
+
+nltk.download("stopwords")
+from nltk.corpus import stopwords
+
+STOPWORDS = stopwords.words("english")
+STOPWORDS = [stopword + " " for stopword in STOPWORDS]
 nlp = spacy.load("en_core_web_sm")
 
 
