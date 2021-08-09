@@ -19,12 +19,14 @@ Findings of EMNLP (long). 2020.
 ```
 
 ## Content
-1. [Requirement](#requirement)
-2. [Quick test](#quick-test)
-3. [UnifiedQA training](#unifiedqa-training)
-4. [Finetuning](#finetuning)
-5. [Evaluation](#evaluation)
-6. [Results](#results)
+- [UnifiedQA BART](#unifiedqa-bart)
+  - [Content](#content)
+  - [Requirement](#requirement)
+  - [Quick test](#quick-test)
+  - [UnifiedQA training](#unifiedqa-training)
+  - [Finetuning](#finetuning)
+  - [Evaluation](#evaluation)
+  - [Results](#results)
 
 
 ## Requirement
@@ -38,6 +40,13 @@ pip install git+https://github.com/huggingface/transformers.git@7b75aa9fa55bee57
 ```
 
 Download all UnifiedQA datasets and test dataset, which are preprocessed in an input-output format:
+
+For pre-trained datasets
+```
+chmod +x download_data.sh; ./download_data.sh "pretrained"
+```
+
+For other datasets
 ```
 chmod +x download_data.sh; ./download_data.sh
 ```
