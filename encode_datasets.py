@@ -1627,7 +1627,66 @@ def quail():
     challenge_count=quail_process("challenge.jsonl","quail","challenge")
     with open(f"/content/quail/counts.json", "w+") as outfile:
         json.dump({"train": train_count, "dev": dev_count, "challenge": challenge_count}, outfile)
-        
+ 
+def onestopqa_process(dataset, kind):
+    fout_adv = open(f"{dataset}_advanced/{kind}.tsv", "w+")
+    fmeta_adv = open(f"{dataset}_advanced/{kind}_meta.txt", "w+")
+    fout_int = open(f"{dataset}_intermediate/{kind}.tsv", "w+")
+    fmeta_int = open(f"{dataset}_intermediate/{kind}_meta.txt", "w+")
+    fout_ele = open(f"{dataset}_elementry/{kind}.tsv", "w+")
+    fmeta_ele = open(f"{dataset}_elementry/{kind}_meta.txt", "w+")
+    counter=0
+    paras=[]
+    spans=["<A1>", "<A2>", "<A3>", "</A1>", "</A2>", "</A3>", "<D1>", "<D2>", "<D3>", "</D1>", "</D2>", "</D3>", "\n","\t"]
+    file_path="/content/onestop-qa/annotations/annotated_articles/*.txt"
+    for file in glob.glob(file_path):
+        with open(file) as f:
+            content=f.read()
+            paras.append(content.split("# Paragraph"))
+    for paragraph in paras:
+        for para in paragraph:
+            paralines=para.split("\n")
+            paralines=list(filter(None, paralines))
+            for idx in range(len(paralines)):
+                if paralines[idx].find("Adv: ")!= -1:
+                    adv=paralines[idx][5:]
+                    adv.strip().replace("   ", " ").replace("  ", " ")
+                    for item in spans:
+                        adv=adv.replace(item,"")
+                if paralines[idx].find("Int: ")!= -1:
+                    inter=paralines[idx][5:]
+                    inter.strip().replace("   ", " ").replace("  ", " ")
+                    for item in spans:
+                        inter=inter.replace(item,"")
+                if paralines[idx].find("Ele: ")!= -1:
+                    ele=paralines[idx][5:]
+                    ele.strip().replace("   ", " ").replace("  ", " ")
+                    for item in spans:
+                        ele=ele.replace(item,"")
+                if paralines[idx].find("Q: ")!= -1:
+                    counter +=1
+                    question=paralines[idx][3:]
+                    question=question.strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+                    if '?' not in question:
+                        question = question + "?"
+                    options=paralines[idx+1:idx+5]
+                    answer_string=paralines[idx+1][3:]
+                    answer_index="A"
+                    candidates = " ".join([f"({chr(ord('A') + i)}) {x[3:]}" for i, x in enumerate(options)])
+
+                    fout_adv.write(f"{question} \\n {candidates} \\n {adv} \t {answer_string} \n")
+                    fmeta_adv.write(f"{counter}\t{answer_index}\n")
+                    fout_int.write(f"{question} \\n {candidates} \\n {inter} \t {answer_string} \n")
+                    fmeta_int.write(f"{counter}\t{answer_index}\n")
+                    fout_ele.write(f"{question} \\n {candidates} \\n {ele} \t {answer_string} \n")
+                    fmeta_ele.write(f"{counter}\t{answer_index}\n")
+    return counter
+
+def onestopqa():
+    train_count=onestopqa_process("onestopqa","train")
+    with open(f"/content/counts.json", "w+") as outfile:
+        json.dump({"train": train_count}, outfile)
+
 anlg()
 summarization()
 drop()
@@ -1669,3 +1728,4 @@ race_c()
 record_extractive()
 record_mc()
 quail()
+onestopqa()
