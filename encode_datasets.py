@@ -12,6 +12,7 @@ import pandas as pd
 import codecs
 import nltk
 import glob
+import xml.etree.ElementTree as ET
 
 
 nltk.download("stopwords")
@@ -1686,6 +1687,43 @@ def onestopqa():
     train_count=onestopqa_process("onestopqa","train")
     with open(f"/content/counts.json", "w+") as outfile:
         json.dump({"train": train_count}, outfile)
+        
+def mcscript_process(file,dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    counter=0
+
+    tree = ET.parse("/content/"+file)
+    root = tree.getroot()
+    for elem in root:#instance
+        context=elem[0].text
+        context=context.strip().replace("\n", "").replace("\t", "").replace("--", "").replace("   ", " ").replace("  ", " ")
+        id1=elem.get('id')
+        for questions in elem[1]:
+            counter+=1
+            question=questions.get('text')
+            question=question.strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            if '?' not in question:
+                question = question + "?"
+            id2=questions.get('id')
+            candidates=[]
+            for idx in range(len(questions)):
+                if questions[idx].get('correct')=="True":
+                    answer_index=chr(ord('A') + idx)
+                    answer_string=questions[idx].get('text')
+                candidates.append(questions[idx].get('text'))
+            options = " ".join([f"({chr(ord('A') + i)}) {x}" for i, x in enumerate(candidates)])
+    
+            fout.write(f"{question} \\n {options} \\n {context} \t {answer_string} \n")
+            fmeta.write(f"{id1} {id2}\t{answer_index}\n")
+    return counter
+
+def mcscript():
+    train_count=mcscript_process("train-data.xml","mcscript","train")
+    dev_count=mcscript_process("dev-data.xml","mcscript","dev")
+    test_count=mcscript_process("test-data.xml","mcscript","test")
+    with open(f"/content/mcscript/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
 
 anlg()
 summarization()
@@ -1729,3 +1767,4 @@ record_extractive()
 record_mc()
 quail()
 onestopqa()
+mcscript()
