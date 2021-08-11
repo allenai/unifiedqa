@@ -1724,6 +1724,11 @@ def mcscript():
     test_count=mcscript_process("test-data.xml","mcscript","test")
     with open(f"/content/mcscript/counts.json", "w+") as outfile:
         json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
+    train_count=mcscript_process("train-data.xml","mcscript 2.0","train")
+    dev_count=mcscript_process("dev-data.xml","mcscript 2.0","dev")
+    test_count=mcscript_process("test-data.xml","mcscript 2.0","test")
+    with open(f"/content/mcscript 2.0/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
 
 anlg()
 summarization()
