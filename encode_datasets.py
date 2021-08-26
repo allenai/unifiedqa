@@ -13,6 +13,9 @@ import codecs
 import nltk
 import glob
 import xml.etree.ElementTree as ET
+from datasets import load_dataset
+import statistics
+import json
 
 
 nltk.download("stopwords")
@@ -1730,6 +1733,334 @@ def mcscript():
     with open(f"/content/mcscript 2.0/counts.json", "w+") as outfile:
         json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
 
+def adversarialqa():
+    for dataset1 in ['dbidaf', 'dbert', 'droberta']:
+        dataset = load_dataset("adversarial_qa", dataset1)
+        print(f" * dataset: {dataset1}")
+        stats = {}
+        for split in ['train', 'test', 'dev']:
+            outfile = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/adversarialqa_{dataset1}/{split}.tsv", "w+")
+            # outfile_meta = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/adversarialqa_{dataset1}/{split}_meta.tsv", "w+")
+            split1 = split
+            if split == "dev":
+                split1 = "validation"
+            all_encoded = ""
+            # all_encoded_meta = ""
+            counter = 0
+            for x in dataset[split1]:
+                counter += 1
+                context = x['context'].lower().replace("\t", " ").replace("\n", " ")
+                question = x['question'].lower().replace("\t", " ").replace("\n", " ")
+                title = x['title'].lower().replace("\t", " ").replace("\n", " ")
+                if len(x['answers']['text']) == 0:
+                    answer_text = ""
+                else:
+                    answer_text = x['answers']['text'][0].lower().replace("\t", " ").replace("\n", " ")
+                all_encoded += f"{question} \\n ({title}) {context} \t {answer_text} \n"
+                # all_encoded_meta += f"{question} \\n ({title}) {context} \t {answer_text} \n"
+            outfile.write(all_encoded)
+            stats[split] = counter
+
+        outfile_stat = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/adversarialqa_{dataset1}/counts.json", "w+")
+        outfile_stat.write(json.dumps(stats))
+
+
+def aqua_rat():
+    stats = {}
+    for split in ['test', 'dev', 'train']:
+        file = f"/Users/danielk/ideaProjects/AQuA/{split}.json"
+        all_encoded = ""
+        outfile = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/aqua_rat/{split}.tsv", "w+")
+        counter = 0
+        with open(file, "+r") as f:
+            for line in f.readlines():
+                json_all = json.loads(line.replace("\n", ""))
+                print(json_all)
+                question = json_all['question'].lower().replace("\n", " ").replace("\t", " ")
+                options = json_all['options']
+                options_str = " (".join(options).lower().replace("\n", " ").replace("\t", " ")
+                options_str = "(" + options_str
+                correct = json_all['correct'].lower()
+                print(correct)
+                correct_idx = ord(correct) - ord('a')
+                correct_ans_str = options[correct_idx].split(")")[1]
+                all_encoded += f"{question}\\n{options_str}\t{correct_ans_str} \n"
+                counter += 1
+            outfile.write(all_encoded)
+            stats[split] = counter
+        outfile_stat = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/aqua_rat/counts.json", "w+")
+        outfile_stat.write(json.dumps(stats))
+
+
+def CODAH():
+    file = "/Users/danielk/ideaProjects/CODAH/data/full_data.tsv"
+    outfile = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/codah/dev.tsv", "w+")
+    counter = 0
+    stats = {}
+    all_encoded = ""
+    with open(file) as f:
+        for line in f.readlines():
+            counter += 1
+            line_split = line.split("\t")
+            type = line_split[0]
+            question = line_split[1]
+            o1 = line_split[2]
+            o2 = line_split[3]
+            o3 = line_split[4]
+            o4 = line_split[5]
+            ans_idx = int(line_split[6])
+            if ans_idx == 0:
+                ans_str = o1
+            elif ans_idx == 1:
+                ans_str = o2
+            elif ans_idx == 2:
+                ans_str = o3
+            elif ans_idx == 3:
+                ans_str = o4
+            else:
+                raise Exception(f"hm .... {ans_idx}")
+            ans_str = ans_str.replace("\n", " ").replace("\t", " ")
+            input = f"{question} \\n (a) {o1} (b) {o2} (c) {o3} (d) {o4}".replace("\n", " ").replace("\t", " ")
+            all_encoded += f"{input}\t{ans_str} \n"
+    outfile.write(all_encoded)
+    stats['dev'] = counter
+    outfile_stat = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/codah/counts.json", "w+")
+    outfile_stat.write(json.dumps(stats))
+
+
+# COVID-QA: A Question Answering Dataset for COVID-19
+# its average context length is around 4k tokens
+def covidqa():
+    file = "/Users/danielk/Desktop/COVID-QA.json"
+    fout = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/covid_qa_deepset/dev.tsv", "w+")
+    # ftargets = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/covid_qa_deepset/{segment}_targets.txt", "+w")
+    # finputs = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/covid_qa_deepset/{segment}_inputs.txt", "+w")
+    ans_size = []
+    counter = 0
+    stats = {}
+    context_size = []
+    with open(file) as f:
+        file = json.load(f)
+        for section in file['data']:
+            # title = section['title'].replace("\n", " ").replace("\t", " ")
+            for para in section['paragraphs']:
+                context = para['context'].replace("\n", " ").replace("\t", " ")
+                for qa in para['qas']:
+                    question = qa['question'].replace("\n", " ").replace("\t", " ")
+                    ans_size.append(len(qa['answers']))
+                    for a in qa['answers']:
+                        answer = a['text'].replace("\n", " ").replace("\t", " ")
+                        fout.write(f"{question} \\n {context}\t{answer}\n")
+                        counter += 1
+                        context_size.append(len(context.split(" ")))
+                        # ftargets.write(f"{answer}\n")
+                        # finputs.write(f"{question} \\n ({title}) {context}\n")
+    print(sum(ans_size) / len(ans_size))
+    stats['dev'] = counter
+    outfile_stat = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/covid_qa_deepset/counts.json", "w+")
+    outfile_stat.write(json.dumps(stats))
+    print(context_size)
+    print(statistics.mean(context_size))
+
+
+def read_and_parse_multiqa(file, dataset, kind):
+    fout = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/{dataset}/{kind}_meta.txt", "w+")
+    ans = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/{dataset}/{kind}_ans.jsonl", "w+")
+
+    with open(file) as f:
+        for l in f.readlines()[1:]:
+            json_line = json.loads(l)
+            pid = json_line['id']
+            paragraph = ""
+            for p in json_line['context']['documents']:
+                if 'title' in p:
+                    paragraph += f" ({p['title']}) "
+                paragraph += p['text']
+            paragraph = paragraph.strip().replace("\n", "").replace("\t", "")
+            for q in json_line['qas']:
+                qid = q['qid']
+                fmeta.write(f"{pid}, {qid} \n")
+                question = q['question']
+                answers = []
+                print(q)
+                if 'cannot_answer' in q['answers']['open-ended']:
+                    if q['answers']['open-ended']['cannot_answer'] == 'yes':
+                        answers.append('<No Answer>')
+                else:
+                    for a in q['answers']['open-ended']['annotators_answer_candidates']:
+                        print(a)
+                        if 'extractive' in a['single_answer']:
+                            answers.append(a['single_answer']['extractive']['answer'])
+                        elif 'yesno' in a['single_answer']:
+                            answers.append(a['single_answer']['yesno'])
+                        else:
+                            print("yo yo yo ")
+
+                assert len(answers) > 0
+
+                paragraph = paragraph.replace("\t", "").replace("   ", " ").replace("  ", " ").replace("\n", " ")
+                question = question.replace("\t", "").replace("   ", " ").replace("  ", " ").replace("\n", " ")
+                if '?' not in question:
+                    question = question + "?"
+                all_ans = [a.replace("\t", "").replace("   ", " ").replace("  ", " ").replace("\n", " ") for a in
+                           answers]
+
+                print(all_ans)
+                fout.write(f"{question.strip()} \\n {paragraph.strip()}\t{all_ans[0].strip()}\n")
+                ans.write(json.dumps(all_ans) + "\n")
+
+
+# the average paragraph length is 512 tokens
+def duo_rc():
+    read_and_parse_multiqa("/Users/danielk/ideaProjects/t2t-qa/datasets/DuoRC_Paraphrase_dev.jsonl",
+                           "duo_rc_paraphrase", "dev")
+    read_and_parse_multiqa("/Users/danielk/ideaProjects/t2t-qa/datasets/DuoRC_Paraphrase_train.jsonl",
+                           "duo_rc_paraphrase", "train")
+
+    read_and_parse_multiqa("/Users/danielk/ideaProjects/t2t-qa/datasets/DuoRC_Self_dev.jsonl", "duo_rc_self", "dev")
+    read_and_parse_multiqa("/Users/danielk/ideaProjects/t2t-qa/datasets/DuoRC_Self_train.jsonl", "duo_rc_self", "train")
+
+
+def headqa():
+    def read_file(infile, outfile, outfile_meta):
+        outfile = open(outfile, "w+")
+        outfile_meta = open(outfile_meta, "w+")
+        all_lines = ""
+        counter = 0
+        with open(infile) as f:
+            json_data = json.load(f)
+            for ex, v in json_data['exams'].items():
+                for x in v['data']:
+                    counter += 1
+                    print(" - - - - - - - - - ")
+                    print(x)
+                    question = x['qtext'].lower().replace("\t", " ").replace("\n", " ")
+                    answer_idx = int(x['ra']) - 1
+                    answers = [y['atext'] for y in x['answers']]
+                    candidates = "".join([f" ({chr(ord('A') + i)}) {x}" for i, x in enumerate(answers)])
+                    candidates = candidates.lower().replace("\t", " ").replace("\n", " ")
+                    correct_ans_str = answers[answer_idx].lower().replace("\t", " ").replace("\n", " ")
+                    correct_ans_label = chr(answer_idx + ord('A'))
+                    all_lines += f"{question} \\n {candidates} \t {correct_ans_str} \n"
+                    outfile_meta.write(f"{x['qid']} \t {correct_ans_label} \n")
+        outfile.write(all_lines)
+        return counter
+
+    stats = {}
+    dir = "/Users/danielk"
+    stats['dev'] = read_file(f"{dir}/Desktop/HEAD_EN/dev_HEAD_EN.json",
+                             f"{dir}/ideaProjects/t2t-qa/t2t-data/head_qa_en_test/dev.tsv",
+                             f"{dir}/ideaProjects/t2t-qa/t2t-data/head_qa_en_test/dev_meta.tsv")
+    stats['test'] = read_file(f"{dir}/Desktop/HEAD_EN/test_HEAD_EN.json",
+                              f"{dir}/ideaProjects/t2t-qa/t2t-data/head_qa_en_test/test.tsv",
+                              f"{dir}/ideaProjects/t2t-qa/t2t-data/head_qa_en_test/test_meta.tsv")
+    stats['train'] = read_file(f"{dir}/Desktop/HEAD_EN/train_HEAD_EN.json",
+                               f"{dir}/ideaProjects/t2t-qa/t2t-data/head_qa_en_test/train.tsv",
+                               f"{dir}/ideaProjects/t2t-qa/t2t-data/head_qa_en_test/train_meta.tsv")
+
+    outfile_stat = open(f"{dir}/ideaProjects/t2t-qa/t2t-data/head_qa_en_test/counts.json", "w+")
+    outfile_stat.write(json.dumps(stats))
+
+
+test_split = [
+    1,
+    100,
+    111,
+    113,
+    122,
+    134,
+    136,
+    137,
+    139,
+    144,
+    153,
+    154,
+    157,
+    158,
+    163,
+    164,
+    168,
+    175,
+    179,
+    18,
+    188,
+    19,
+    192,
+    197,
+    202,
+    204,
+    205,
+    206,
+    207,
+    25,
+    28,
+    31,
+    33,
+    34,
+    38,
+    44,
+    50,
+    57,
+    59,
+    66,
+    67,
+    7,
+    71,
+    74,
+    79,
+    84,
+    86,
+    88,
+    97,
+    98,
+]
+
+dir = "/Users/danielk/Desktop/processbankdata/qa"
+def convert_proccess_bank():
+
+    def process(inputfile, outfile):
+        all_lines = ""
+        counter = 0
+        inputfile = open(inputfile, "r")
+        outfile = open(outfile, "w+")
+        for line in inputfile.readlines():
+            counter += 1
+            linejson = json.loads(line)
+            # print(linejson)
+            context = linejson['text'].lower().replace("\t", " ").replace("\n", " ").strip()
+            for question in linejson['questions']['question']:
+                print(" - - - - ")
+                print(question)
+                print(type(question))
+                if type(question) == str:
+                    continue
+                q = question['q'].lower().replace("\t", " ").replace("\n", " ").strip()
+                a0 = question['a0']
+                a1 = question['a1']
+                if type(a0) == str:
+                    a0 = a0.lower().replace("\t", " ").replace("\n", " ").strip()
+                if type(a1) == str:
+                    a1 = a1.lower().replace("\t", " ").replace("\n", " ").strip()
+                candidates = f"(a) {a0} (b) {a1} ".lower().replace("\t", " ").replace("\n", " ").strip()
+                correct = question['correct']
+                if correct == 0:
+                    correct_str = a0
+                else:
+                    correct_str = a1
+
+                all_lines += f"{q} \\n {candidates} \\n {context} \t {correct_str} \n"
+        outfile.write(all_lines)
+        return counter
+
+    dir = "/Users/danielk"
+    stats = {}
+    stats['test'] = process(f"{dir}/Desktop/processbankdata/test.jsonl", f"{dir}/ideaProjects/t2t-qa/t2t-data/processbank/test.tsv")
+    stats['train'] = process(f"{dir}/Desktop/processbankdata/train.jsonl", f"{dir}/ideaProjects/t2t-qa/t2t-data/processbank/train.tsv")
+    outfile_stat = open(f"{dir}/ideaProjects/t2t-qa/t2t-data/processbank/counts.json", "w+")
+    outfile_stat.write(json.dumps(stats))
+        
+        
 anlg()
 summarization()
 drop()
@@ -1773,3 +2104,10 @@ record_mc()
 quail()
 onestopqa()
 mcscript()
+convert_proccess_bank()
+headqa()
+duo_rc()
+covidqa()
+CODAH()
+aqua_rat()
+adversarialqa()
