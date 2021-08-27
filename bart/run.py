@@ -11,7 +11,7 @@ from unified_data import UnifiedQAData
 from bart import MyBart
 
 def run(args, logger):
-    tokenizer = BartTokenizer.from_pretrained("bart-large")
+    tokenizer = BartTokenizer.from_pretrained("facebook/bart-large")  #TJH: bart-large
 
     if args.is_unifiedqa:
         dev_data = UnifiedQAData(logger, args, args.predict_file, False)
@@ -31,10 +31,11 @@ def run(args, logger):
         train_data.load_dataloader()
 
         if args.checkpoint is not None:
-            model = MyBart.from_pretrained("bart-large",
-                                           state_dict=torch.load(args.checkpoint))
+            model = MyBart.from_pretrained("facebook/bart-large",
+                                           state_dict=torch.load(args.checkpoint))  #TJH: bart-large
+            logger.info("Loading checkpoint from {}".format(args.checkpoint))       #TJH Added
         else:
-            model = MyBart.from_pretrained("bart-large")
+            model = MyBart.from_pretrained("facebook/bart-large") #TJH: bart-large
         if args.n_gpu>1:
             model = torch.nn.DataParallel(model)
         if args.n_gpu>0:
@@ -53,8 +54,8 @@ def run(args, logger):
 
     if args.do_predict:
         checkpoint = os.path.join(args.output_dir, 'best-model.pt') if args.checkpoint is None else args.checkpoint
-        model = MyBart.from_pretrained("bart-large",
-                                       state_dict=torch.load(checkpoint))
+        model = MyBart.from_pretrained("facebook/bart-large",
+                                       state_dict=torch.load(checkpoint)) #TJH: bart-large
         logger.info("Loading checkpoint from {}".format(checkpoint))
         if args.n_gpu>0:
             model.to(torch.device("cuda"))
@@ -83,12 +84,20 @@ def train(args, logger, model, train_data, dev_data, optimizer, scheduler):
 
     logger.info("Starting training!")
     for epoch in range(int(args.num_train_epochs)):
+        if args.verbose: 
+            logger.info("Starting Epoch %d" % (epoch))  #TJH added
         for batch in train_data.dataloader:
+            if args.verbose and global_step % 100 == 0:
+                logger.info("Epoch %d   Global Step %d" % (epoch, global_step))   #TJH Added
             global_step += 1
             batch = [b.to(torch.device("cuda")) for b in batch]
-            loss = model(input_ids=batch[0], attention_mask=batch[1],
-                         decoder_input_ids=batch[2], decoder_attention_mask=batch[3],
-                         is_training=True)
+# TJH: this was the original unifiedqa:            
+#            loss = model(input_ids=batch[0], attention_mask=batch[1],
+#                         decoder_input_ids=batch[2], decoder_attention_mask=batch[3],
+#                         is_training=True)
+            outputs = model(input_ids=batch[0], attention_mask=batch[1],
+                         labels=batch[2], decoder_attention_mask=batch[3])  
+            loss = outputs["loss"] if isinstance(outputs, dict) else outputs[0]  #TJH added 
             if args.n_gpu > 1:
                 loss = loss.mean() # mean() to average on multi-gpu.
             if torch.isnan(loss).data:
@@ -117,6 +126,8 @@ def train(args, logger, model, train_data, dev_data, optimizer, scheduler):
                     torch.save(model_state_dict, os.path.join(args.output_dir,
                                                               "best-model-{}.pt".format(str(global_step).zfill(6))))
                 else:
+                    if args.verbose:
+                        logger.info("Step %d Starting inference.." % (global_step)) #TJH Added
                     model.eval()
                     curr_em = inference(model if args.n_gpu==1 else model.module, dev_data)
                     logger.info("Step %d Train loss %.2f %s %.2f%% on epoch=%d" % (
@@ -138,8 +149,10 @@ def train(args, logger, model, train_data, dev_data, optimizer, scheduler):
                         stop_training = False
                     else:
                         wait_step += 1
+                        logger.info("No improvement. Number of wait steps: %d of max wait steps: %d" % (wait_step, args.wait_step))
                         if wait_step >= args.wait_step:
                             stop_training = True
+                            logger.info("Early Stopping due to no improvement after %d wait steps!" % (wait_step))   #TJH Added
                             break
                 model.train()
         if stop_training:
@@ -155,7 +168,7 @@ def inference(model, dev_data, save_predictions=False):
         outputs = model.generate(input_ids=batch[0],
                                  attention_mask=batch[1],
                                  num_beams=dev_data.args.num_beams,
-                                 min_lnegth=1,
+                                 min_length=1,  #TJH: was min_lnegth
                                  max_length=dev_data.args.max_output_length,
                                  early_stopping=True,)
         for input_, output in zip(batch[0], outputs):

@@ -23,8 +23,8 @@ class UnifiedQAData(QAData):
             "boolq",
             "race_string",
             "openbookqa"]
-        self.data_path = data_path
-        self.data_type = data_path.split("/")[-1][:-4]
+        self.data_path = data_path  #TJH this would be ../unifiedqa/train.tsv
+        self.data_type = data_path.split("/")[-1][:-4]    #TJH strip .tsv from filename appearing after final "/"
         assert self.data_type in ["train", "dev", "test"]
 
         if args.debug:
@@ -96,10 +96,14 @@ class UnifiedQAData(QAData):
                 questions = ["<s> "+question for question in questions]
                 answers = ["<s> " +answer for answer in answers]
             question_input = self.tokenizer.batch_encode_plus(questions,
-                                                            pad_to_max_length=True,
-                                                            max_length=self.args.max_input_length)
+                                                              truncation=True,       #TJH added
+                                                              padding='max_length',  #TJH was pad_to_max_length=True,
+                                                              max_length=self.args.max_input_length)
             answer_input = self.tokenizer.batch_encode_plus(answers,
-                                                            pad_to_max_length=True)
+                                                            truncation=True,       #TJH added
+                                                            padding='max_length',  #TJH was pad_to_max_length=True,
+                                                            max_length=self.args.max_input_length)
+
             input_ids, attention_mask = question_input["input_ids"], question_input["attention_mask"]
             decoder_input_ids, decoder_attention_mask = answer_input["input_ids"], answer_input["attention_mask"]
             print ("Finish tokenizering...")

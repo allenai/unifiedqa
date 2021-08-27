@@ -1,0 +1,9 @@
+# Ignore files
+*.pyc
+extract_features_timbackup.py
+
+# Ignore directories
+features/
+dataset/videos/
+__pycache__
+
