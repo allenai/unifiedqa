@@ -1389,8 +1389,7 @@ def strategyqa_process(file, dataset, kind):
 def strategyqa_process_test(file, dataset, kind):
     fout = open(f"{dataset}/{kind}.tsv", "w+")
     fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
-    ans = open(f"{dataset}/{kind}_ans.jsonl", "w+")
-
+    
     df=pd.read_json(codecs.open('/content/'+file,'r','utf-8'))
     questions=df[['qid','question']].values
 
@@ -1416,7 +1415,6 @@ def strategyqa_process_test(file, dataset, kind):
         retrieved_document=''.join(retrieved_documents).strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
     
         fout.write(f"{question}\\n {retrieved_document} \t{answer[0]}\n")
-        ans.write(json.dumps(answer) + "\n")
         fmeta.write(f"{qid} \n")
     return len(questions)
 
