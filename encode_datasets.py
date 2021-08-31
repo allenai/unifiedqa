@@ -14,9 +14,7 @@ import nltk
 import glob
 import xml.etree.ElementTree as ET
 from datasets import load_dataset
-import statistics
-import json
-
+import statistic
 
 nltk.download("stopwords")
 from nltk.corpus import stopwords
@@ -1282,9 +1280,10 @@ def csqa2_process_test(file, dataset, kind):
         if '?' not in question:
             question = question + "?"
         id=questions[row][1]
+        answer=["-"]
 
         fmeta.write(f"{id} \n")
-        fout.write(f"{question}\n")
+        fout.write(f"{question} \t{answer[0]}\n")    
     return len(questions)
     
 def csqa():
@@ -1390,6 +1389,7 @@ def strategyqa_process(file, dataset, kind):
 def strategyqa_process_test(file, dataset, kind):
     fout = open(f"{dataset}/{kind}.tsv", "w+")
     fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    ans = open(f"{dataset}/{kind}_ans.jsonl", "w+")
 
     df=pd.read_json(codecs.open('/content/'+file,'r','utf-8'))
     questions=df[['qid','question']].values
@@ -1406,6 +1406,7 @@ def strategyqa_process_test(file, dataset, kind):
         arr=documents[query]
         retrieved_documents=[]
         token_num=0
+        answer=["-"]
         for result in arr[0]:
             sentences=result["sentence"].split(".")
             for index in range(len(sentences)-1):
@@ -1414,7 +1415,8 @@ def strategyqa_process_test(file, dataset, kind):
                     retrieved_documents.append(sentences[index] + ".")
         retrieved_document=''.join(retrieved_documents).strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
     
-        fout.write(f"{question}\\n {retrieved_document}\n")
+        fout.write(f"{question}\\n {retrieved_document} \t{answer[0]}\n")
+        ans.write(json.dumps(answer) + "\n")
         fmeta.write(f"{qid} \n")
     return len(questions)
 
@@ -1469,13 +1471,18 @@ def reclor_process_test(file, dataset, kind):
         question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
         if '?' not in question:
             question = question + "?"
-        candidates=questions[row][1]        
-        options = " ".join([f"({chr(ord('A') + i)}) {x}" for i, x in enumerate(candidates)])
+        option1=" (A) "+questions[row][1][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        option2=" (B) "+questions[row][1][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        option3=" (C) "+questions[row][1][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        option4=" (D) "+questions[row][1][3].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        options = option1 + option2 + option3 + option4 
         contexts=questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        answer_index="-"
+        answer="-"
         id=questions[row][3]
 
-        fmeta.write(f"{id}\n")
-        fout.write(f"{question} \\n{options} \\n {contexts}\n")
+        fmeta.write(f"{id}\t{answer_index}\n")
+        fout.write(f"{question} \\n{options} \\n {contexts}\t{answer}\n")
     return len(questions)
 
 def reclor():
@@ -1535,13 +1542,12 @@ def record_process_extractive (file,dataset, kind):
                     question = question + "."  
                 if kind is not "test":     
                     answer_string=json_line['qas'][index]['answers'][0]['text'].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+                else:
+                    answer_string="-"
                 id=json_line['qas'][index]['idx']
 
                 fmeta.write(f"{id}\n")
-                if kind=="test":
-                    fout.write(f"{question} \\n {contexts} \n")
-                else:
-                    fout.write(f"{question} \\n {contexts} \t {answer_string} \n")
+                fout.write(f"{question} \\n {contexts} \t {answer_string} \n")
     return counter
 
 def record_extractive():
@@ -1585,14 +1591,13 @@ def record_process_mc(file,dataset, kind):
                 if kind is not "test":     
                     answer_string=answer_string.strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
                     answer_index=chr(ord('A') + options.index(answer_string))
+                else:
+                    answer_string="-"
+                    answer_index="-"
                 id=json_line['qas'][index]['idx']
 
-                if kind=="test":
-                    fout.write(f"{question} \\n {candidates} \\n {contexts} \n")
-                    fmeta.write(f"{id}\n")
-                else:
-                    fout.write(f"{question} \\n {candidates} \\n {contexts} \t {answer_string} \n")
-                    fmeta.write(f"{id}\t{answer_index}\n")
+                fout.write(f"{question} \\n {candidates} \\n {contexts} \t {answer_string} \n")
+                fmeta.write(f"{id}\t{answer_index}\n")
     return counter
 
 def record_mc():
@@ -2059,7 +2064,185 @@ def convert_proccess_bank():
     stats['train'] = process(f"{dir}/Desktop/processbankdata/train.jsonl", f"{dir}/ideaProjects/t2t-qa/t2t-data/processbank/train.tsv")
     outfile_stat = open(f"{dir}/ideaProjects/t2t-qa/t2t-data/processbank/counts.json", "w+")
     outfile_stat.write(json.dumps(stats))
+    
+def cosmosqa_process(file,dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    counter=0
+    
+    if kind=='test':
+        df=pd.read_json("/content/cosmosqa/data/test.jsonl",lines=True)
+        questions=df[['id','context','question','answer0','answer1','answer2','answer3']].values
+    else:
+        df=pd.read_csv("/content/cosmosqa/data/"+file)
+        questions=df[['id','context','question','answer0','answer1','answer2','answer3','label']].values
+
+    for row in range(len(questions)):
+        id=questions[row][0]
+        contexts=questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        question=questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+        option1=" (A) "+questions[row][3].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        option2=" (B) "+questions[row][4].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        option3=" (C) "+questions[row][5].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        option4=" (D) "+questions[row][6].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        options = option1 + option2 + option3 + option4 
+
+        if kind=='test':
+            answer="-"
+            answer_string="-"
+        else:
+            answer_index = questions[row][7]
+            answer=chr(ord('A')+answer_index)
+            answer_string=questions[row][answer_index+3].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        fmeta.write(f"{id}\t{answer} \n")
+        fout.write(f"{question} \\n{options} \\n {contexts}\t{answer_string} \n")
+    return len(questions)
+
+def cosmosqa():
+    train_count=cosmosqa_process("train.csv","cosmos","train")
+    val_count=cosmosqa_process("valid.csv","cosmos","val")
+    test_count=cosmosqa_process("test.jsonl","cosmos","test")
+    with open(f"/content/cosmos/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "val": val_count, "test": test_count}, outfile)
         
+def tweetqa_process(file,dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    df=pd.read_json("/content/"+file)
+
+    if kind=='test':
+        questions=df[['Question','Tweet','qid']].values
+    else:
+        questions=df[['Question','Tweet','qid','Answer']].values
+
+    for row in range(len(questions)):
+        id=questions[row][2]
+        contexts=questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        if '?' not in question:
+            question = question + "?"
+        fmeta.write(f"{id}\n")
+        if kind=='test':
+            answer_string="-"
+        else:
+            answer_string=questions[row][3][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        fout.write(f"{question} \\n {contexts}\t{answer_string} \n")
+    return len(questions) 
+
+def tweetqa():
+    train_count=tweetqa_process("train.json","tweetqa","train")
+    dev_count=tweetqa_process("dev.json","tweetqa","dev")
+    test_count=tweetqa_process("test.json","tweetqa","test")
+    with open(f"/content/tweetqa/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
+
+#measuring massive multitask language understanding dataset
+def mmmlu_process(dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    counter=0
+
+    file_path="/content/"+kind+"/*.csv"
+    for file in glob.glob(file_path):
+        df=pd.read_csv(file,header=None)
+        questions=df.values
+
+        for row in range(len(questions)):
+            counter+=1
+            question=questions[row][0].strip().rstrip("\n").replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            option1=" (A) "+questions[row][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            option2=" (B) "+questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            option3=" (C) "+questions[row][3].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            option4=" (D) "+questions[row][4].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            options = option1 + option2 + option3 + option4 
+
+            answer=questions[row][5]
+            answer_index = ord(answer)-ord('A')
+            answer_string=questions[row][answer_index+1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            fmeta.write(f"{counter}\t{answer} \n")
+            fout.write(f"{question} \\n{options} \t{answer_string} \n")
+    return counter
+
+def mmmlu():
+    val_count=mmmlu_process("measuring_massive_multitask_language_understanding","val")
+    dev_count=mmmlu_process("measuring_massive_multitask_language_understanding","dev")
+    test_count=mmmlu_process("measuring_massive_multitask_language_understanding","test")
+    with open(f"/content/measuring_massive_multitask_language_understanding/counts.json", "w+") as outfile:
+        json.dump({"val": val_count, "dev": dev_count, "test": test_count}, outfile)
+        
+def dream_process(file,dataset, kind):
+    fout = open(f"{dataset}/{kind}.tsv", "w+")
+    fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
+    counter=0
+
+    df=pd.read_json('/content/dream/data/'+file)
+    questions=df.values
+
+    for row in range(len(questions)):
+        dialogs=questions[row][0]
+        context=" ".join(dialogs)
+        context=context.strip().rstrip("\n").replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        materials=questions[row][1]
+        id=questions[row][2]
+        for item in materials:
+            question=item['question'].strip().rstrip("\n").replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            choices=item['choice']
+            options = " ".join([f"({chr(ord('A') + i)}) {x}" for i, x in enumerate(choices)])
+            answer_string=item['answer'].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            answer=chr(ord('A') + choices.index(answer_string))
+            counter+=1
+
+            fmeta.write(f"{id}\t{answer} \n")
+            fout.write(f"{question} \\n{options} \\n {context}\t{answer_string} \n")
+    return counter
+
+def dream():
+    train_count=dream_process("train.json","Dream","train")
+    dev_count=dream_process("dev.json","Dream","dev")
+    test_count=dream_process("test.json","Dream","test")
+    with open(f"/content/Dream/counts.json", "w+") as outfile:
+        json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
+
+def prost_process(dataset, kind):
+    fout_od = open(f"{dataset}_open_domain_with_context/{kind}.tsv", "w+")
+    fmeta_od = open(f"{dataset}_open_domain_with_context/{kind}_meta.txt", "w+")
+    fout_mc = open(f"{dataset}_multiple_choice_with_context/{kind}.tsv", "w+")
+    fmeta_mc = open(f"{dataset}_multiple_choice_with_context/{kind}_meta.txt", "w+")
+    fout_od_no = open(f"{dataset}_open_domain_with_no_context/{kind}.tsv", "w+")
+    fmeta_od_no = open(f"{dataset}_open_domain_with_no_context/{kind}_meta.txt", "w+")
+    fout_mc_no = open(f"{dataset}_multiple_choice_with_no_context/{kind}.tsv", "w+")
+    fmeta_mc_no = open(f"{dataset}_multiple_choice_with_no_context/{kind}_meta.txt", "w+")
+    counter=0
+
+    dataset =load_dataset('corypaik/prost', split='test')
+
+    for row in range(len(dataset)):
+        question=dataset[row]['ex_question'].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        open_question=dataset[row]['question'].strip().replace("[MASK]","_").replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        context=dataset[row]['context'].strip().rstrip("\n").replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        id=dataset[row]['name']
+        choices=[dataset[row]['A'],dataset[row]['B'],dataset[row]['C'],dataset[row]['D']]
+        options = " ".join([f"({chr(ord('A') + i)}) {x}" for i, x in enumerate(choices)])
+        answer_index=dataset[row]['label']
+        answer_string=choices[answer_index]
+        answer=chr(ord('A') + answer_index)
+
+        fmeta_mc.write(f"{id}\t{answer} \n")
+        fout_mc.write(f"{question} \\n{options} \\n {context}\t{answer_string} \n")
+        fmeta_od.write(f"{id}\n")
+        fout_od.write(f"{open_question} \\n {context}\t{answer_string} \n")
+        fmeta_mc_no.write(f"{id}\t{answer} \n")
+        fout_mc_no.write(f"{question} \\n{options}\t{answer_string} \n")
+        fmeta_od_no.write(f"{id}\n")
+        fout_od_no.write(f"{open_question}\t{answer_string} \n")
+    return len(dataset)
+
+def prost():
+    test_count=prost_process("prost","test")
+    with open(f"/content/counts.json", "w+") as outfile:
+        json.dump({"test": test_count}, outfile)
         
 anlg()
 summarization()
@@ -2111,3 +2294,8 @@ covidqa()
 CODAH()
 aqua_rat()
 adversarialqa()
+cosmosqa()
+tweetqa()
+mmmlu()
+dream()
+prost()
