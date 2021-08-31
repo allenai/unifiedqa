@@ -2238,6 +2238,48 @@ def prost():
     test_count=prost_process("prost","test")
     with open(f"/content/counts.json", "w+") as outfile:
         json.dump({"test": test_count}, outfile)
+
+def qaconv():
+    mapping = {
+        "trn": "train",
+        "val": "val", 
+        "tst": "test"
+    }
+
+    article_json = json.load(open("/content/QAConv/data/article_segment.json"))
+
+    output_dir = "/content/qaconv"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    count_all=[]
+    for dtype in ["trn", "val", "tst"]:  
+        ques_json = json.load(open("/content/QAConv/data/{}.json".format(dtype)))
+        src_all=[]
+        meta_all=[]
+        count=0
+        for qa_pair in ques_json:
+            count+=1
+            context = article_json[qa_pair["article_segment_id"]]["seg_dialog"]
+            context = " ".join(['{}: {}'.format(c["speaker"], c["text"].replace("\n", " ")) for c in context])
+            context=context.strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            question=qa_pair["question"].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            if len(qa_pair["answers"]):
+                # here we only use the first potential answers
+                answer = qa_pair["answers"][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+            else: # unanswerable
+                answer = "unanswerable"
+            src = "{} \\n {} \t {}".format(question,context,answer)
+            src_all.append(src)
+            id=qa_pair["id"]
+            meta_all.append(id)
+        count_all.append(count)
+        with open("{}/{}.tsv".format(output_dir, mapping[dtype]), "w") as fout:    
+            fout.write("\n".join(src_all))
+        with open("{}/{}_meta.txt".format(output_dir, mapping[dtype]), "w") as fout:
+            fout.write("\n".join(meta_all))
+    with open("{}/counts.json".format(output_dir), "w") as outfile:
+        json.dump({"train": count_all[0], "val": count_all[1], "test": count_all[2]}, outfile)
         
 anlg()
 summarization()
@@ -2294,3 +2336,4 @@ tweetqa()
 mmmlu()
 dream()
 prost()
+qaconv()
