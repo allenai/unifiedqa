@@ -1469,11 +1469,8 @@ def reclor_process_test(file, dataset, kind):
         question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
         if '?' not in question:
             question = question + "?"
-        option1=" (A) "+questions[row][1][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
-        option2=" (B) "+questions[row][1][1].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
-        option3=" (C) "+questions[row][1][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
-        option4=" (D) "+questions[row][1][3].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
-        options = option1 + option2 + option3 + option4 
+        candidates=questions[row][1]        
+        options = " ".join([f"({chr(ord('A') + i)}) {x}" for i, x in enumerate(candidates)])
         contexts=questions[row][2].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
         answer_index="-"
         answer="-"
