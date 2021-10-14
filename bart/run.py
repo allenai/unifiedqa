@@ -155,7 +155,7 @@ def inference(model, dev_data, save_predictions=False):
         outputs = model.generate(input_ids=batch[0],
                                  attention_mask=batch[1],
                                  num_beams=dev_data.args.num_beams,
-                                 min_lnegth=1,
+                                 min_length=1,
                                  max_length=dev_data.args.max_output_length,
                                  early_stopping=True,)
         for input_, output in zip(batch[0], outputs):
