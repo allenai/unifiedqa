@@ -2242,7 +2242,7 @@ def prost():
 def qaconv():
     mapping = {
         "trn": "train",
-        "val": "val", 
+        "val": "dev", 
         "tst": "test"
     }
 
@@ -2267,12 +2267,13 @@ def qaconv():
             if len(qa_pair["answers"]):
                 # here we only use the first potential answers
                 answer = qa_pair["answers"][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+                all_answers = "//".join([x.strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ") for x in qa_pair["answers"]])
             else: # unanswerable
-                answer = "unanswerable"
+                answer = "<No Answer>"
             src = "{} \\n {} \t {}".format(question,context,answer)
             src_all.append(src)
             id=qa_pair["id"]
-            meta_all.append(id)
+            meta_all.append(f"{id}\t{all_answers}")
         count_all.append(count)
         with open("{}/{}.tsv".format(output_dir, mapping[dtype]), "w") as fout:    
             fout.write("\n".join(src_all))
