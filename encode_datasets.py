@@ -1770,7 +1770,9 @@ def aqua_rat():
     for split in ['test', 'dev', 'train']:
         file = f"/Users/danielk/ideaProjects/AQuA/{split}.json"
         all_encoded = ""
+        all_encoded_meta = ""
         outfile = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/aqua_rat/{split}.tsv", "w+")
+        outfile_meta = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/aqua_rat/{split}_meta.tsv", "w+")
         counter = 0
         with open(file, "+r") as f:
             for line in f.readlines():
@@ -1785,8 +1787,11 @@ def aqua_rat():
                 correct_idx = ord(correct) - ord('a')
                 correct_ans_str = options[correct_idx].split(")")[1]
                 all_encoded += f"{question}\\n{options_str}\t{correct_ans_str} \n"
+                correct_ans_label = chr(correct_idx + ord('A'))
+                all_encoded_meta += f"-\t{correct_ans_label}\n"
                 counter += 1
             outfile.write(all_encoded)
+            outfile_meta.write(all_encoded_meta)
             stats[split] = counter
         outfile_stat = open(f"/Users/danielk/ideaProjects/t2t-qa/t2t-data/aqua_rat/counts.json", "w+")
         outfile_stat.write(json.dumps(stats))
