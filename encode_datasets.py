@@ -2102,10 +2102,10 @@ def cosmosqa_process(file,dataset, kind):
 
 def cosmosqa():
     train_count=cosmosqa_process("train.csv","cosmos","train")
-    val_count=cosmosqa_process("valid.csv","cosmos","val")
+    val_count=cosmosqa_process("valid.csv","cosmos","dev")
     test_count=cosmosqa_process("test.jsonl","cosmos","test")
     with open(f"/content/cosmos/counts.json", "w+") as outfile:
-        json.dump({"train": train_count, "val": val_count, "test": test_count}, outfile)
+        json.dump({"train": train_count, "dev": val_count, "test": test_count}, outfile)
         
 def tweetqa_process(file,dataset, kind):
     fout = open(f"{dataset}/{kind}.tsv", "w+")
