@@ -1282,7 +1282,7 @@ def csqa2_process_test(file, dataset, kind):
         id=questions[row][1]
         answer=["-"]
 
-        fmeta.write(f"{id} \n")
+        fmeta.write(f"{id}\t{answer[0]} \n")
         fout.write(f"{question} \t{answer[0]}\n")    
     return len(questions)
     
@@ -1482,10 +1482,10 @@ def reclor_process_test(file, dataset, kind):
 
 def reclor():
     train_count = reclor_process("train.json","reclor","train")
-    val_count = reclor_process("val.json","reclor","val")
+    dev_count = reclor_process("val.json","reclor","dev")
     test_count = reclor_process_test("test.json","reclor","test")
     with open(f"/content/reclor/counts.json", "w+") as outfile:
-        json.dump({"train": train_count, "val": val_count, "test": test_count}, outfile)
+        json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
 
 def race_c_process(dataset, kind):
     fout = open(f"{dataset}/{kind}.tsv", "w+")
@@ -1536,21 +1536,24 @@ def record_process_extractive (file,dataset, kind):
                 if '.' not in question:
                     question = question + "."  
                 if kind is not "test":     
-                    answer_string=json_line['qas'][index]['answers'][0]['text'].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+                    all_answers=set()
+                    for answer in range(len(json_line['qas'][index]['answers'])):   
+                        all_answers.add(json_line['qas'][index]['answers'][answer]['text'].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " "))
+                    answer_string="///".join(all_answers)                
                 else:
                     answer_string="-"
                 id=json_line['qas'][index]['idx']
 
-                fmeta.write(f"{id}\n")
+                fmeta.write(f"{id}\t{answer_string}\n")
                 fout.write(f"{question} \\n {contexts} \t {answer_string} \n")
     return counter
 
 def record_extractive():
     train_count=record_process_extractive("train.jsonl","record","train")
-    val_count=record_process_extractive("val.jsonl","record","val")
+    dev_count=record_process_extractive("val.jsonl","record","dev")
     test_count=record_process_extractive("test.jsonl","record","test")
     with open(f"/content/record/counts.json", "w+") as outfile:
-        json.dump({"train": train_count, "val": val_count, "test": test_count}, outfile)
+        json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
         
 def record_process_mc(file,dataset, kind):
     fout = open(f"{dataset}/{kind}.tsv", "w+")
@@ -1597,10 +1600,10 @@ def record_process_mc(file,dataset, kind):
 
 def record_mc():
     train_count=record_process_mc("train.jsonl","record","train")
-    val_count=record_process_mc("val.jsonl","record","val")
+    dev_count=record_process_mc("val.jsonl","record","dev")
     test_count=record_process_mc("test.jsonl","record","test")
     with open(f"/content/record/counts.json", "w+") as outfile:
-        json.dump({"train": train_count, "val": val_count, "test": test_count}, outfile)
+        json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
         
 def quail_process(file,dataset, kind):
     fout = open(f"{dataset}/{kind}.tsv", "w+")
@@ -2102,10 +2105,10 @@ def cosmosqa_process(file,dataset, kind):
 
 def cosmosqa():
     train_count=cosmosqa_process("train.csv","cosmos","train")
-    val_count=cosmosqa_process("valid.csv","cosmos","dev")
+    dev_count=cosmosqa_process("valid.csv","cosmos","dev")
     test_count=cosmosqa_process("test.jsonl","cosmos","test")
     with open(f"/content/cosmos/counts.json", "w+") as outfile:
-        json.dump({"train": train_count, "dev": val_count, "test": test_count}, outfile)
+        json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
         
 def tweetqa_process(file,dataset, kind):
     fout = open(f"{dataset}/{kind}.tsv", "w+")
@@ -2123,11 +2126,14 @@ def tweetqa_process(file,dataset, kind):
         question=questions[row][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
         if '?' not in question:
             question = question + "?"
-        fmeta.write(f"{id}\n")
         if kind=='test':
             answer_string="-"
-        else:
-            answer_string=questions[row][3][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
+        else:            
+            all_answers=set()
+            for answer in range(len(questions[row][3])):
+                all_answers.add(questions[row][3][answer].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " "))
+            answer_string="///".join(all_answers)
+        fmeta.write(f"{id}\t{answer_string}\n")        
         fout.write(f"{question} \\n {contexts}\t{answer_string} \n")
     return len(questions) 
 
@@ -2139,12 +2145,12 @@ def tweetqa():
         json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
 
 #measuring massive multitask language understanding dataset
-def mmmlu_process(dataset, kind):
+def mmmlu_process(file,dataset, kind):
     fout = open(f"{dataset}/{kind}.tsv", "w+")
     fmeta = open(f"{dataset}/{kind}_meta.txt", "w+")
     counter=0
 
-    file_path="/content/"+kind+"/*.csv"
+    file_path="/content/"+file+"/*.csv"
     for file in glob.glob(file_path):
         df=pd.read_csv(file,header=None)
         questions=df.values
@@ -2166,11 +2172,11 @@ def mmmlu_process(dataset, kind):
     return counter
 
 def mmmlu():
-    val_count=mmmlu_process("measuring_massive_multitask_language_understanding","val")
-    dev_count=mmmlu_process("measuring_massive_multitask_language_understanding","dev")
-    test_count=mmmlu_process("measuring_massive_multitask_language_understanding","test")
+    test_count=mmmlu_process("val","measuring_massive_multitask_language_understanding","test")
+    dev_count=mmmlu_process("dev","measuring_massive_multitask_language_understanding","dev")
+    train_count=mmmlu_process("test","measuring_massive_multitask_language_understanding","train")
     with open(f"/content/measuring_massive_multitask_language_understanding/counts.json", "w+") as outfile:
-        json.dump({"val": val_count, "dev": dev_count, "test": test_count}, outfile)
+        json.dump({"train": train_count, "dev": dev_count, "test": test_count}, outfile)
         
 def dream_process(file,dataset, kind):
     fout = open(f"{dataset}/{kind}.tsv", "w+")
