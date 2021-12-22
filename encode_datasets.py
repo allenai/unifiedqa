@@ -1539,7 +1539,7 @@ def record_process_extractive (file,dataset, kind):
                     all_answers=set()
                     for answer in range(len(json_line['qas'][index]['answers'])):   
                         all_answers.add(json_line['qas'][index]['answers'][answer]['text'].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " "))
-                    answer_string="///".join(all_answers)                
+                    answer_string="//".join(all_answers)                
                 else:
                     answer_string="-"
                 id=json_line['qas'][index]['idx']
@@ -2132,7 +2132,7 @@ def tweetqa_process(file,dataset, kind):
             all_answers=set()
             for answer in range(len(questions[row][3])):
                 all_answers.add(questions[row][3][answer].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " "))
-            answer_string="///".join(all_answers)
+            answer_string="//".join(all_answers)
         fmeta.write(f"{id}\t{answer_string}\n")        
         fout.write(f"{question} \\n {contexts}\t{answer_string} \n")
     return len(questions) 
@@ -2276,12 +2276,11 @@ def qaconv():
             context=context.strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
             question=qa_pair["question"].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
             if len(qa_pair["answers"]):
-                # here we only use the first potential answers
                 answer = qa_pair["answers"][0].strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ")
                 all_answers = "//".join([x.strip().replace("\n", "").replace("\t", "").replace("   ", " ").replace("  ", " ") for x in qa_pair["answers"]])
             else: # unanswerable
-                answer = "<No Answer>"
-            src = "{} \\n {} \t {}".format(question,context,answer)
+                all_answers = "<No Answer>"
+            src = "{} \\n {} \t {}".format(question,context,all_answers)
             src_all.append(src)
             id=qa_pair["id"]
             meta_all.append(f"{id}\t{all_answers}")
@@ -2291,7 +2290,7 @@ def qaconv():
         with open("{}/{}_meta.txt".format(output_dir, mapping[dtype]), "w") as fout:
             fout.write("\n".join(meta_all))
     with open("{}/counts.json".format(output_dir), "w") as outfile:
-        json.dump({"train": count_all[0], "val": count_all[1], "test": count_all[2]}, outfile)
+        json.dump({"train": count_all[0], "dev": count_all[1], "test": count_all[2]}, outfile)
         
 anlg()
 summarization()
