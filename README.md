@@ -2,14 +2,35 @@
 
 
 You may want to check out:
- - Our paper: https://arxiv.org/abs/2005.00700
- - Our demo: https://unifiedqa.apps.allenai.org/
+ - Paper: https://arxiv.org/abs/2005.00700
+ - Demo: https://unifiedqa.apps.allenai.org/
+
+Update (Feb '22): UnifiedQA-v2 
+ - Paper: TBD
+ - Demo: TBD
 
 
 ## Using the models in PyTorch/HuggingFace
 
 You can very easily load the models with [Transformers](https://github.com/huggingface/transformers/) >=3.1, instead of downloading them manually. 
-The models are listed on [this page](https://huggingface.co/allenai). 
+The models are listed on [this page](https://huggingface.co/allenai). Here is a list of model these model names hosted on HuggingFace model hub: 
+
+
+| Model Name                | Huggingface ID (s)                      |
+|---------------------------|-----------------------------------------|
+| UnifiedQA (T5) - small    | `allenai/unifiedqa-t5-small`            |
+| UnifiedQA (T5) - base     | `allenai/unifiedqa-t5-base`             |
+| UnifiedQA (T5) - large    | `allenai/unifiedqa-t5-large`            |
+| UnifiedQA (T5) - 3B       | `allenai/unifiedqa-t5-3b`               |
+| UnifiedQA (T5) - 11B      | `allenai/unifiedqa-t5-11b`              |
+| UnifiedQA-v2 (T5) - small | `allenai/unifiedqa-v2-t5-small-[ckpt]`  |
+| UnifiedQA-v2 (T5) - base  | `allenai/unifiedqa-v2-t5-base-[ckpt]`   |
+| UnifiedQA-v2 (T5) - large | `allenai/unifiedqa-v2-t5-large-[ckpt]`  |
+| UnifiedQA-v2 (T5) - 3B    | `allenai/unifiedqa-v2-t5-3b-[ckpt]`     |
+| UnifiedQA-v2 (T5) - 11B   | `allenai/unifiedqa-v2-t5-11b-[ckpt]`    |
+
+
+Where `[ckpt]` parameter can be one of the following values: `1251000` or `1363200`. 
 
 Here is an examples: 
 
