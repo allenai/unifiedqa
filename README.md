@@ -111,6 +111,17 @@ The BART models are downloaded from [this link](https://nlp.cs.washington.edu/am
 For detailed instructions on running the code (training/finetuning/testing), please refer to [here](https://github.com/allenai/unifiedqa/tree/master/bart).
 The `uncased` models usually gave us better and more robust results.
 
+### v2 T5 models 
+
+ - UnifiedQA v2 (T5, small) [gs://unifiedqa/models_v2/small](https://console.cloud.google.com/storage/browser/unifiedqa/models_v2/small)
+ - UnifiedQA v2 (T5, base) [gs://unifiedqa/models_v2/base](https://console.cloud.google.com/storage/browser/unifiedqa/models_v2/base)
+ - UnifiedQA v2 (T5, large) [gs://unifiedqa/models_v2/large](https://console.cloud.google.com/storage/browser/unifiedqa/models_v2/large)
+ - UnifiedQA v2 (T5, 3B) [gs://unifiedqa/models_v2/3B](https://console.cloud.google.com/storage/browser/unifiedqa/models_v2/3B)
+ - UnifiedQA v2 (T5, 11B) [gs://unifiedqa/models_v2/11B](https://console.cloud.google.com/storage/browser/unifiedqa/models_v2/11B)
+
+Note: In the experiments reported in our paper we always used the checkpoint closest to 250k steps. 
+
+
 ## FAQ
 **I am not getting the expected results.** An common issue with using UnifiedQA is making sure you use the separator (`\n`) when encoding encoding your inputs. See [the earlier section](#feeding-data-into-unifiedqa) where we delineate how to encode the inputs.
 
