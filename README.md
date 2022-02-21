@@ -102,9 +102,7 @@ If you wanna see how this encoding is done on our datasets, check out this [scri
 While the datasets we used are all public, it could be a bit time-confusing to convert them all into text-to-text format. We're releasing the already-proccessed text-to-text datasets based on the encoding used in this work. Files are included in [this Google Cloud bucket](https://console.cloud.google.com/storage/browser/unifiedqa/data). [Here](encode_datasets.py) is the script we used in order to convert each dataset into text-in-text-out format.
 
 ## Prediction files
-We're making the predictions of the many of our models available.
-[To be updated]
-
+Reach out to DanielK if you want them! :)
 
 
 ## Released Model Checkpoints
