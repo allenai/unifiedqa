@@ -30,7 +30,7 @@ The models are listed on [this page](https://huggingface.co/allenai). Here is a 
 | UnifiedQA-v2 (T5) - 11B   | `allenai/unifiedqa-v2-t5-11b-[ckpt]`    |
 
 
-Where `[ckpt]` parameter can be one of the following values: `1251000` or `1363200`. 
+Where `[ckpt]` can be either `1251000` or `1363200`. 
 
 Here is an examples: 
 
