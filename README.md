@@ -6,7 +6,7 @@ You may want to check out:
  - Demo: https://unifiedqa.apps.allenai.org/
 
 Update (Feb '22): UnifiedQA-v2 
- - Paper: https://arxiv.org/pdf/2202.12359.pdf
+ - Paper: https://arxiv.org/abs/2202.12359
 
 
 ## Using the models in PyTorch/HuggingFace
