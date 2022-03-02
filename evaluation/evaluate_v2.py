@@ -9,210 +9,210 @@ Options:
    --eval_path=NAME                         gs:// link to predictions to evaluate
 """
 # example run:
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-evaluations/model:union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small_eval:race_string_mixture/small
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-evaluations/model:union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small_eval:race_string_mixture/small
 
 # measuring_massive_multitask_language_understanding
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=measuring_massive_multitask_language_understanding
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=measuring_massive_multitask_language_understanding
 
 # squad1_1: note that does not have a dev file
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=squad1_1
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=squad1_1
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=squad1_1
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=squad1_1
 
 # squad2: note that does not have a dev file
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=squad2
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=squad2
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=squad2
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=squad2
 
 # newsqa
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=newsqa
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=newsqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=newsqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=newsqa
 
 # quoref
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=quoref
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=quoref
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=quoref
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=quoref
 
 # contrast sets: quoref
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=contrast_sets_quoref
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=contrast_sets_quoref
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=contrast_sets_quoref
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=contrast_sets_quoref
 
 # AdversarialQA: BiDAF
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=adversarialqa_dbidaf_dev
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=adversarialqa_dbidaf_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=adversarialqa_dbidaf_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=adversarialqa_dbidaf_dev
 
 # AdversarialQA: BERT
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=adversarialqa_dbert_dev
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=adversarialqa_dbert_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=adversarialqa_dbert_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=adversarialqa_dbert_dev
 
 # AdversarialQA: ReBerta
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=adversarialqa_droberta_dev
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=adversarialqa_droberta_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=adversarialqa_droberta_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=adversarialqa_droberta_dev
 
 # ReCord (ex)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=record_extractive
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=record_extractive
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=record_extractive
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=record_extractive
 
 # ReCord (mc)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=record_multiple_choice
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=record_multiple_choice
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=record_multiple_choice
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=record_multiple_choice
 
 # RACE
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=race_string
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=race_string
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=race_string
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=race_string
 
 # RACE-C
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=race_c
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=race_c
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=race_c
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=race_c
 
 # OBQA (w/o IR)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=openbookqa_dev
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=openbookqa_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=openbookqa_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=openbookqa_dev
 
 # OBQA (w/ IR)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=openbookqa_with_ir
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=openbookqa_with_ir
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=openbookqa_with_ir
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=openbookqa_with_ir
 
 # ARC-easy (w/o IR)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=arc_easy_dev
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=arc_easy_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=arc_easy_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=arc_easy_dev
 
 # ARC-easy (w/ IR)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=arc_easy_with_ir_dev
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=arc_easy_with_ir_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=arc_easy_with_ir_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=arc_easy_with_ir_dev
 
 # ARC-hard (w/o IR)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=arc_hard_dev
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=arc_hard_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=arc_hard_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=arc_hard_dev
 
 # ARC-hard (w/ IR)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=arc_hard_with_ir_dev
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=arc_hard_with_ir_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=arc_hard_with_ir_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=arc_hard_with_ir_dev
 
 # MCTEST
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=mctest_corrected_the_separator
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=mctest_corrected_the_separator
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=mctest_corrected_the_separator
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=mctest_corrected_the_separator
 
 # QASC (w/o IR)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=qasc
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=qasc
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=qasc
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=qasc
 
 # QASC (w/ IR)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=qasc_with_ir
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=qasc_with_ir
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=qasc_with_ir
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=qasc_with_ir
 
 # CommonsenseQA (dev)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=commonsenseqa
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=commonsenseqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=commonsenseqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=commonsenseqa
 
 # PhysicalIQA
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=physical_iqa_test
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=physical_iqa_test
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=physical_iqa_test
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=physical_iqa_test
 
 # SocialIQA
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=social_iqa_test
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=social_iqa_test
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=social_iqa_test
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=social_iqa_test
 
 # Winogrande
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=winogrande_xl
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=winogrande_xl
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=winogrande_xl
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=winogrande_xl
 
 # HeadQA
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=head_qa_en_dev
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=head_qa_en_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=head_qa_en_dev
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=head_qa_en_dev
 
 # measuring_massive_multitask_language_understanding MMMLU
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=measuring_massive_multitask_language_understanding
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=measuring_massive_multitask_language_understanding
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=measuring_massive_multitask_language_understanding
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=measuring_massive_multitask_language_understanding
 
 # AQUA-RAT
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=aqua_rat_test
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=aqua_rat_test
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=aqua_rat_test
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=aqua_rat_test
 
 # ReClor
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=reclor
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=reclor
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=reclor
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=reclor
 
 # QUAIL
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=quail
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=quail
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=quail
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=quail
 
 # OneStop: elementary
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=onestopqa_elementry
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=onestopqa_elementry
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=onestopqa_elementry
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=onestopqa_elementry
 
 # OneStop: intermediate
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=onestopqa_intermediate
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=onestopqa_intermediate
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=onestopqa_intermediate
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=onestopqa_intermediate
 
 # OneStop: advanced
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=onestopqa_advanced
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=onestopqa_advanced
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=onestopqa_advanced
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=onestopqa_advanced
 
 # MCScript
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=mcscript
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=mcscript
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=mcscript
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=mcscript
 
 # MCScript2
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=mcscript2
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=mcscript2
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=mcscript2
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=mcscript2
 
 # Cosmosqa
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=cosmosqa
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=cosmosqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=cosmosqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=cosmosqa
 
 # ProcessBank
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=processbank_test
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=processbank_test
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=processbank_test
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=processbank_test
 
 # DREAM
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=dream
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=dream
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=dream
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=dream
 
 # PROST (w/o context)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=prost_multiple_choice_with_no_context
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=prost_multiple_choice_with_no_context
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=prost_multiple_choice_with_no_context
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=prost_multiple_choice_with_no_context
 
 # PROST (w/ context)
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=prost_multiple_choice_with_context
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=prost_multiple_choice_with_context
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=prost_multiple_choice_with_context
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=prost_multiple_choice_with_context
 
 # boolq
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=boolq_mixture
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=boolq_mixture
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=boolq_mixture
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=boolq_mixture
 
 # boolq_np
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=boolq_np_mixture
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=boolq_np_mixture
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=boolq_np_mixture
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=boolq_np_mixture
 
 # boolq contrast set
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=contrast_sets_boolq
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=contrast_sets_boolq
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=contrast_sets_boolq
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=contrast_sets_boolq
 
 # StrategyQA
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=strategyqa
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=strategyqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=strategyqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=strategyqa
 
 # PubmedQA
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=pubmedqa_pqal_short_ans
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=pubmedqa_pqal_short_ans
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=pubmedqa_pqal_short_ans
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=pubmedqa_pqal_short_ans
 
 # CommonsenseQA 2.0: note, it's a yes/no dataset
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=csqa2
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=csqa2
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=csqa2
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=csqa2
 
 # NarrativeQA
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=narrativeqa
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=narrativeqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=narrativeqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=narrativeqa
 
 # ROPES
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=ropes
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=ropes
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=ropes
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=ropes
 
 # qaconv
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=qaconv
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=qaconv
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/test_eval --target_dataset=qaconv
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/test_eval --target_dataset=qaconv
 
 # TweetQA
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=tweetqa
-# python evaluate_multiple_choice_answers.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=tweetqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_mixture/small/dev_eval --target_dataset=tweetqa
+# python evaluate_v2.py  --eval_path=gs://danielk-files/t5-models/union_v2_mixture_pretrained:gs:__t5-data_pretrained_models_small/small/dev_eval --target_dataset=tweetqa
 
 
 
