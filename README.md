@@ -34,10 +34,10 @@ Where `[ckpt]` can be either `1251000` or `1363200`.
 Here is an examples: 
 
 ```python
-from transformers import AutoTokenizer, T5ForConditionalGeneration
+from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 model_name = "allenai/unifiedqa-t5-small" # you can specify the model size here
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer = T5Tokenizer.from_pretrained(model_name)
 model = T5ForConditionalGeneration.from_pretrained(model_name)
 
 def run_model(input_string, **generator_args):
