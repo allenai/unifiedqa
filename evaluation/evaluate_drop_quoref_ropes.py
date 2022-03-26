@@ -128,7 +128,7 @@ def _align_bags(predicted: List[Set[str]], gold: List[Set[str]]) -> List[float]:
     return max_scores
 
 
-def get_metrics(
+def f1_metrics(
         predicted: Union[str, List[str], Tuple[str, ...]], gold: Union[str, List[str], Tuple[str, ...]]
 ) -> Tuple[float, float]:
     """
@@ -197,7 +197,7 @@ def eval_dir(dir, checkpoint='all'):
         scores = []
         for k, v in instances.items():
             golds_subset = [golds[i] for i in v]
-            metric = get_metrics(predictions[v[0]], tuple(golds_subset))
+            metric = f1_metrics(predictions[v[0]], tuple(golds_subset))
             scores.append(metric[1])
             # print(metric)
             # rouge_l_score = metric_max_over_ground_truths(rouge_l, predictions[v[0]], golds_subset)
