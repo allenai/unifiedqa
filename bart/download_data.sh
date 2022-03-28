@@ -2,7 +2,7 @@
 
 mkdir -p data
 
-BASE_URL=https://storage.googleapis.com/danielk-files/data
+BASE_URL=https://storage.googleapis.com/unifiedqa/data
 
 # datasets for pretraining
 #for dataset in narrativeqa ai2_science_middle ai2_science_elementary arc_hard arc_easy mctest_corrected_the_separator squad1_1 squad2 boolq race_string openbookqa ; do
