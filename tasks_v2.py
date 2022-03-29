@@ -183,3 +183,41 @@ for task in [
         # sentencepiece_model_path=t5.data.DEFAULT_SPM_PATH,
         metric_fns=[metrics.squad]
     )
+    
+    
+# v2 union model
+union_datasets_v2 = [
+    "narrativeqa_dev",
+    "ai2_science_middle",
+    "ai2_science_elementary",
+    "arc_hard", "arc_easy",
+    "mctest_corrected_the_separator",
+    "squad1_1", "squad2",
+    "boolq",
+    "race_string",
+    "openbookqa",
+    "quoref",
+    "newsqa",
+    "ropes",
+    "multirc",
+    "drop",
+    "qasc",
+    "boolq_np",
+    "commonsenseqa",
+    "qasc_with_ir",
+    "openbookqa_with_ir",
+    "arc_easy_with_ir",
+    "arc_hard_with_ir",
+    "natural_questions_with_dpr_para",
+    "winogrande_xl",
+    "social_iqa",
+    "physical_iqa",
+]
+print(f" >>>> adding one mixture for `union_mixture`")
+t5.data.MixtureRegistry.add(
+    f"union_v2_mixture",
+    [f"{d}_task" for d in union_datasets_v2],
+    default_rate=1.0
+)
+    
+    
