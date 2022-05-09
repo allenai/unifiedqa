@@ -29,7 +29,7 @@ The models are listed on [this page](https://huggingface.co/allenai). Here is a 
 | UnifiedQA-v2 (T5) - 11B   | `allenai/unifiedqa-v2-t5-11b-[ckpt]`    |
 
 
-Where `[ckpt]` can be either `1251000` or `1363200`.  The numbers in the paper are reported based on `1251000` checkpoints. 
+Where `[ckpt]` can be either `1251000` or `1363200`.  The numbers in [the paper](https://arxiv.org/abs/2202.12359) are reported based on `1251000` checkpoints. 
 
 Here is an examples: 
 
