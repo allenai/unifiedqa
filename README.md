@@ -161,10 +161,10 @@ If you extend or use this work, please cite the relevant papers:
     year={2020}
 }
 @article{khashabi2022unifiedqa,
-  title={UnifiedQA-v2: Stronger Generalization via Broader Cross-Format Training},
-  author={Khashabi, Daniel and Kordi, Yeganeh and Hajishirzi, Hannaneh},
-  journal={arXiv preprint arXiv:2202.12359},
-  year={2022}
+    title={UnifiedQA-v2: Stronger Generalization via Broader Cross-Format Training},
+    author={Khashabi, Daniel and Kordi, Yeganeh and Hajishirzi, Hannaneh},
+    journal={arXiv preprint arXiv:2202.12359},
+    year={2022}
 }
 ```
 
