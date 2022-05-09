@@ -152,13 +152,19 @@ ValueError: Configurable 'make_layer_stack' doesn't have a parameter named 'use_
 
 ## How to cite
 
-If you extend or use this work, please cite the paper:
+If you extend or use this work, please cite the relevant papers:
 ```bibtex
-@article{2020unifiedqa,
+@inproceedings{2020unifiedqa,
     title={UnifiedQA: Crossing Format Boundaries With a Single QA System},
     author={D. Khashabi and S. Min and T. Khot and A. Sabhwaral and O. Tafjord and P. Clark and H. Hajishirzi},
     journal={EMNLP - findings},
     year={2020}
+}
+@article{khashabi2022unifiedqa,
+  title={UnifiedQA-v2: Stronger Generalization via Broader Cross-Format Training},
+  author={Khashabi, Daniel and Kordi, Yeganeh and Hajishirzi, Hannaneh},
+  journal={arXiv preprint arXiv:2202.12359},
+  year={2022}
 }
 ```
 
